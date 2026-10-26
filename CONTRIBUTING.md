@@ -19,7 +19,9 @@ A view depends on core alone, never on another view, and imports it by package n
 package's `src/architecture.test.ts` enforces it. Inside the workspace, `tsconfig.base.json` maps
 every package name to its source, so nothing needs building to test or typecheck.
 
-`site/` is the documentation site; its demos import the packages from source.
+`site/` is the documentation site; its demos import the packages from source. `stories/` is a
+[Ladle](https://ladle.dev) workspace with stories for every view, also against source: add a
+`src/<view>.stories.tsx` there when you add a view.
 
 ## The loop
 
@@ -28,8 +30,9 @@ Run from the root, these cover every package; run inside `packages/<name>` for j
 ```sh
 bun install
 bun test             # unit, component, boundary and README-example tests (happy-dom, no browser)
-bun run typecheck    # the packages, their scripts, README examples and the docs demos
+bun run typecheck    # the packages, their scripts, README examples, docs demos and stories
 bun run build        # each package's dist/, checked against its API reports and size budget
+bun run stories      # every view's stories in Ladle, live against the source
 bun run format       # Prettier
 ```
 

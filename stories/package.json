@@ -1,0 +1,17 @@
+{
+  "name": "@data-profile/stories",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "ladle serve",
+    "build": "ladle build",
+    "preview": "ladle preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@ladle/react": "5.1.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "vite": "^6.0.5"
+  }
+}
