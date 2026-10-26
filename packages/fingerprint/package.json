@@ -57,6 +57,9 @@
     "lint:package": "publint && attw --pack . --profile esm-only --exclude-entrypoints ./styles.css",
     "check:consumer": "bun run scripts/check-consumer.ts"
   },
+  "dependencies": {
+    "@data-profile/core": "^0.0.0"
+  },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0"
   },

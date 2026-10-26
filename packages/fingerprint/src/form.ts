@@ -1,4 +1,4 @@
-import { unitHash } from "./hash";
+import { unitHash } from "@data-profile/core";
 import type { FingerprintDimension, FingerprintItem, FingerprintForm } from "./types";
 
 const clamp = (value: number, low: number, high: number) => Math.min(high, Math.max(low, value));

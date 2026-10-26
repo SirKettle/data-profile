@@ -1,69 +1,43 @@
-/**
- * The fingerprint's data contract. It knows items, dimensions and categories, nothing about what
- * is being collected: every domain word arrives as data.
- */
-
-/** One thing in the collection, drawn as one mark (below the mark cap). */
-export interface FingerprintItem {
-  /** Stable and unique. Marks keep this identity when the view changes. */
-  id: string;
-  /** Mark area is proportional to weight. Defaults to 1; must be positive. */
-  weight?: number;
-  /**
-   * The item's category in each dimension, keyed by dimension id. `null`, `undefined`, a missing
-   * key or a category id the dimension does not list all place the item in that dimension's
-   * unknown category: unknowns are drawn, never dropped.
-   */
-  values: Readonly<Record<string, string | null | undefined>>;
-}
-
-/** One category of a dimension. */
-export interface FingerprintCategory {
-  /** Unique within its dimension. `"~unknown"` is reserved. */
-  id: string;
-  /** Shown in legends, lists and descriptions. */
-  label: string;
-  /** Any CSS colour, custom properties included. Defaults to the package palette, by position. */
-  color?: string;
-  /** A link for this category, shown in `FingerprintList`. */
-  href?: string;
-}
-
-/** One way of grouping the items. Category order is the order marks are laid out in. */
-export interface FingerprintDimension {
-  /** Unique; the key items use in `values`. */
-  id: string;
-  /** Shown as the legend's heading and in descriptions. */
-  label: string;
-  /** In the order they should be drawn and listed. */
-  categories: readonly FingerprintCategory[];
-  /** Label of the category unknown values fall into. Defaults to "Unknown". */
-  unknownLabel?: string;
-  /**
-   * True when the categories run in a meaningful order (decades, sizes). Only an ordered dimension
-   * may drive lightness: on unordered categories, fainter and stronger would read as less and more.
-   */
-  ordered?: boolean;
-}
-
-/** The visual properties a dimension can drive. `arrange` orders marks along the ridges. */
-export type FingerprintChannel = "arrange" | "color" | "shape" | "lightness";
+import type {
+  Category,
+  Channel,
+  Dimension,
+  Encoding,
+  Item,
+  LegendEntry,
+  LegendGroup,
+  Mark,
+  Profile,
+} from "@data-profile/core";
 
 /**
- * Which dimension drives which visual property, by dimension id. `color` and `shape` default to
- * the `arrange` dimension, so `{ arrange: "genre" }` is a single-dimension view; `null` turns a
- * property off. Size is never available: mark area is reserved for weight.
+ * The fingerprint's data contract. The data types are `@data-profile/core`'s, under the names this
+ * package has always used; the rest is the fingerprint's own geometry.
  */
-export interface FingerprintEncoding {
-  /** Orders marks along the ridges, so its categories form runs. */
-  arrange: string;
-  /** Colours each mark by this dimension's categories. Defaults to `arrange`. */
-  color?: string | null;
-  /** Gives each category of this dimension its own mark shape. Defaults to `arrange`. */
-  shape?: string | null;
-  /** Fades marks along this ordered dimension, first category faintest. Off by default. */
-  lightness?: string | null;
-}
+
+/** One thing in the collection, drawn as one mark (below the mark cap). Core's `Item`. */
+export type FingerprintItem = Item;
+
+/** One category of a dimension. Core's `Category`. */
+export type FingerprintCategory = Category;
+
+/** One way of grouping the items. Category order is the order marks are laid out in. Core's `Dimension`. */
+export type FingerprintDimension = Dimension;
+
+/** The visual properties a dimension can drive. `arrange` orders marks along the ridges. Core's `Channel`. */
+export type FingerprintChannel = Channel;
+
+/**
+ * Which dimension drives which visual property, by dimension id. `arrange` orders marks along the
+ * ridges. Core's `Encoding`.
+ */
+export type FingerprintEncoding = Encoding;
+
+/** One category in a legend, with how its marks are drawn and how many items it holds. Core's `LegendEntry`. */
+export type FingerprintLegendEntry = LegendEntry;
+
+/** One dimension's legend, and which visual properties that dimension drives. Core's `LegendGroup`. */
+export type FingerprintLegendGroup = LegendGroup;
 
 /** The three classes every fingerprint falls into. */
 export type RidgePattern = "loop" | "whorl" | "arch";
@@ -120,17 +94,8 @@ export interface LayoutInput extends LayoutOptions {
 /** A point in the layout's frame. Internal: the public types spell it out. */
 export type Point = readonly [x: number, y: number];
 
-/** A laid-out mark, in the layout's fixed coordinate frame. */
-export interface FingerprintNode {
-  /** The item id, or a combination key and index when the mark stands for several items. */
-  id: string;
-  /** The items this mark stands for: one, unless the collection exceeded `maxMarks`. */
-  itemIds: readonly string[];
-  /**
-   * The mark's category in every encoded dimension, keyed by dimension id; an unknown value is
-   * `UNKNOWN_CATEGORY_ID`. The arranging category is `categories[layout.encoding.arrange]`.
-   */
-  categories: Readonly<Record<string, string>>;
+/** A laid-out mark: core's `Mark`, placed in the layout's fixed coordinate frame. */
+export interface FingerprintNode extends Mark {
   /** Centre, in the layout's frame. */
   x: number;
   /** Centre, in the layout's frame. */
@@ -139,62 +104,17 @@ export interface FingerprintNode {
   rotation: number;
   /** Diameter of the mark's footprint. Area is proportional to weight. */
   size: number;
-  /** The summed weight of `itemIds`. */
-  weight: number;
-  /** From the colour dimension; `currentColor` when nothing drives colour. */
-  color: string;
-  /**
-   * The mark's shape: the index of its category in the shape dimension (0, 1, 2, …). `0` also when
-   * nothing drives shape, so a plain mark is the first shape; `null` when its shape category is
-   * unknown.
-   */
-  shape: number | null;
-  /** 0 (faintest) to 1 (full strength) along an ordered dimension; null when unknown or not encoded. */
-  lightness: number | null;
 }
 
-/** One category in a legend, with how its marks are drawn and how many items it holds. */
-export interface FingerprintLegendEntry {
-  /** The category id, or `UNKNOWN_CATEGORY_ID`. */
-  id: string;
-  /** The category label, or the dimension's `unknownLabel`. */
-  label: string;
-  /** The colour a mark of this category gets, or `currentColor` when this dimension drives no colour. */
-  color: string;
-  /** As `FingerprintNode.shape`, for this category; `0` when this dimension drives no shape. */
-  shape: number | null;
-  /** As `FingerprintNode.lightness`, for this category; null when this dimension drives no lightness. */
-  lightness: number | null;
-  /** The category's link, if it has one. */
-  href?: string;
-  /** True for the unknown category. */
-  unknown: boolean;
-  /** Items in this category, whatever their weight. */
-  count: number;
-  /** The summed weight of those items. */
-  weight: number;
-}
-
-/** One dimension's legend, and which visual properties that dimension drives. */
-export interface FingerprintLegendGroup {
-  /** The dimension's id. */
-  dimensionId: string;
-  /** The dimension's label. */
-  label: string;
-  /** What this dimension drives in the current encoding. */
-  channels: readonly FingerprintChannel[];
-  /** In category order, the unknown category last and only when it has items. */
-  entries: FingerprintLegendEntry[];
-}
-
-/** What `layoutFingerprint` returns: everything a renderer needs, in a fixed frame. */
-export interface FingerprintLayout {
+/**
+ * What `layoutFingerprint` returns: everything a renderer needs, in a fixed frame. Core's `Profile`
+ * with its marks placed as `nodes`, and the ridges they sit on.
+ */
+export interface FingerprintLayout extends Omit<Profile, "marks"> {
   /** The fixed coordinate frame's width; resizing scales it, never changes it. */
   width: number;
   /** The fixed coordinate frame's height. */
   height: number;
-  /** Every property resolved to a dimension id, or null when off. */
-  encoding: Required<FingerprintEncoding>;
   /** The marks, laid along the ridges from the core outwards. */
   nodes: FingerprintNode[];
   /** The ridges marks sit on, core outwards, as polylines of `[x, y]` points, for renderers that draw them. */
@@ -203,14 +123,6 @@ export interface FingerprintLayout {
   form: FingerprintForm;
   /** Centre-to-centre distance between neighbouring ridges. */
   ridgeSpacing: number;
-  /** One group per encoded dimension: colour first, then shape, lightness and arrangement. */
-  legends: FingerprintLegendGroup[];
-  /** Encodings that will be hard to read, such as more colours than stay distinguishable. */
-  warnings: string[];
-  /** 1 unless the item count exceeded `maxMarks`. Say so on screen when it is not 1. */
-  itemsPerMark: number;
-  /** All the items, whatever `itemsPerMark`. */
-  itemCount: number;
 }
 
 /**

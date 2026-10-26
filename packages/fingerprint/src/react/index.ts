@@ -3,7 +3,7 @@
  * `useFingerprint` hook that wires them together, and the built-in renderers.
  *
  * @packageDocumentation
- * @module react
+ * @module fingerprint/react
  */
 export {
   FingerprintCanvas,

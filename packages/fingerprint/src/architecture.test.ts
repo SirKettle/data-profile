@@ -15,6 +15,8 @@ const FORBIDDEN_WORDS =
   /\b(lego|studopus|rebrickable|picabase|bricks?|minifig\w*|holdings?|clerk|posthog)\b/i;
 const FORBIDDEN_IMPORTS = [
   /from\s+["']@picabase\//,
+  // A view builds on @data-profile/core alone, never on another view.
+  /from\s+["']@data-profile\/(?!core["'])/,
   /from\s+["'](\.\.\/)+(apps|packages)\//,
   /from\s+["']\.\.\/\.\.\//,
 ];
@@ -58,9 +60,9 @@ describe("package boundary", () => {
     expect(offenders).toEqual([]);
   });
 
-  test("has no runtime dependencies", async () => {
+  test("depends at runtime on @data-profile/core alone", async () => {
     const manifest = await Bun.file(`${ROOT}/package.json`).json();
-    expect(manifest.dependencies ?? {}).toEqual({});
+    expect(Object.keys(manifest.dependencies ?? {})).toEqual(["@data-profile/core"]);
     expect(Object.keys(manifest.peerDependencies ?? {})).toEqual(["react"]);
   });
 });

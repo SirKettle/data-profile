@@ -1,9 +1,10 @@
 /**
- * Installs the packed package into a fresh npm project, as a consumer would, and proves it works
- * there: type-checked under `bundler` and `node16` resolution, then run under plain Node (a server
- * render of the canvas and a legend). The React version is an argument, so CI runs it as a matrix.
+ * Installs the packed package, with the packed `@data-profile/core` it depends on, into a fresh npm
+ * project, as a consumer would, and proves it works there: type-checked under `bundler` and
+ * `node16` resolution, then run under plain Node (a server render of the canvas and a legend). The
+ * React version is an argument, so CI runs it as a matrix.
  *
- *   bun run build && bun run scripts/check-consumer.ts [react-version]
+ *   bun run build (at the root) && bun run scripts/check-consumer.ts [react-version]
  *   e.g. bun run scripts/check-consumer.ts 18
  */
 import { $ } from "bun";
@@ -13,20 +14,33 @@ import { join } from "node:path";
 
 const [react = "19"] = process.argv.slice(2);
 const root = join(import.meta.dir, "..");
-if (!(await Bun.file(join(root, "dist/index.js")).exists())) {
-  console.error("check-consumer: no dist/; run `bun run build` first");
+if (
+  !(await Bun.file(join(root, "dist/index.js")).exists()) ||
+  !(await Bun.file(join(root, "../core/dist/index.js")).exists())
+) {
+  console.error(
+    "check-consumer: no dist/ here or in ../core; run `bun run build` at the root first",
+  );
   process.exit(1);
 }
 
 const app = await mkdtemp(join(tmpdir(), "fingerprint-consumer-"));
 try {
-  const packed = await $`npm pack --pack-destination ${app} --silent`.cwd(root).text();
-  const tarball = packed.trim().split("\n").pop()!;
+  // Core is packed from the workspace too: the check is of the two as they would be published.
+  const pack = async (dir: string) =>
+    join(
+      app,
+      (await $`npm pack --pack-destination ${app} --silent`.cwd(dir).text())
+        .trim()
+        .split("\n")
+        .pop()!,
+    );
+  const tarballs = [await pack(join(root, "../core")), await pack(root)];
   await Bun.write(
     join(app, "package.json"),
     JSON.stringify({ name: "consumer", private: true, type: "module" }),
   );
-  await $`npm install --silent --no-audit --no-fund ${join(app, tarball)} react@${react} react-dom@${react} @types/react@${react} @types/react-dom@${react} typescript@5`.cwd(
+  await $`npm install --silent --no-audit --no-fund ${tarballs} react@${react} react-dom@${react} @types/react@${react} @types/react-dom@${react} typescript@5`.cwd(
     app,
   );
   await cp(join(import.meta.dir, "consumer/consumer.ts"), join(app, "consumer.ts"));

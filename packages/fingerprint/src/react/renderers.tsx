@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { markOpacity } from "../opacity";
+import { markOpacity } from "@data-profile/core";
 import type { FingerprintLegendGroup, FingerprintNode } from "../types";
 
 export { markOpacity };

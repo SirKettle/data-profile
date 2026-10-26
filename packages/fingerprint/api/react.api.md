@@ -14,7 +14,7 @@ import type { FingerprintLayout } from '@data-profile/fingerprint';
 import type { FingerprintLegendGroup } from '@data-profile/fingerprint';
 import type { FingerprintNode } from '@data-profile/fingerprint';
 import { JSX } from 'react';
-import { markOpacity } from '@data-profile/fingerprint';
+import { markOpacity } from '@data-profile/core';
 import type { ReactNode } from 'react';
 import type { RidgeStyle } from '@data-profile/fingerprint';
 
