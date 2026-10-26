@@ -1,0 +1,58 @@
+{
+  "name": "@data-profile/waffle",
+  "version": "0.0.0",
+  "description": "Draw any categorical dataset as a waffle: one cell per item in a grid, filled in reading order so each category is a run.",
+  "license": "MIT",
+  "author": "Will Thirkettle",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SirKettle/data-profile.git",
+    "directory": "packages/waffle"
+  },
+  "homepage": "https://sirkettle.github.io/data-profile/",
+  "bugs": {
+    "url": "https://github.com/SirKettle/data-profile/issues"
+  },
+  "keywords": [
+    "waffle",
+    "waffle-chart",
+    "unit-chart",
+    "visualisation",
+    "data-visualization",
+    "categorical",
+    "deterministic"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@data-profile/core": "^0.1.0"
+  },
+  "scripts": {
+    "build": "bun run scripts/build.ts",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.examples.json",
+    "api:report": "bun run scripts/build.ts --api-report",
+    "lint:package": "publint && attw --pack . --profile esm-only",
+    "check:consumer": "bun run scripts/check-consumer.ts"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@microsoft/api-extractor": "^7.59.4",
+    "publint": "^0.3.25"
+  }
+}
