@@ -8,7 +8,8 @@
       "package-name": "@data-profile/core",
       "component": "core",
       "changelog-path": "CHANGELOG.md",
-      "bump-minor-pre-major": true
+      "bump-minor-pre-major": true,
+      "initial-version": "0.1.0"
     },
     "packages/fingerprint": {
       "release-type": "node",
