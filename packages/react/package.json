@@ -1,6 +1,6 @@
 {
   "name": "@data-profile/react",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "The React pieces every data-profile view shares: a canvas for placed marks with motion and selection, legends, lists, a view switch and renderers.",
   "license": "MIT",
   "author": "Will Thirkettle",
