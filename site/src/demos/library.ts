@@ -1,4 +1,4 @@
-import type { FingerprintDimension, FingerprintItem } from "@thirkettle/collection-fingerprint";
+import type { FingerprintDimension, FingerprintItem } from "@data-profile/fingerprint";
 
 // A made-up library for the demos: books with a genre, a publication decade and a reading state.
 // Any collection works the same way; only the dimensions and their categories change.

@@ -3,7 +3,20 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "@thirkettle/collection-fingerprint",
+      "name": "data-profile",
+      "devDependencies": {
+        "@types/react": "^19.0.0",
+        "@types/react-dom": "^19.0.0",
+        "bun-types": "^1.3.14",
+        "prettier": "3.9.6",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "typescript": "^5.9.3",
+      },
+    },
+    "packages/fingerprint": {
+      "name": "@data-profile/fingerprint",
+      "version": "0.0.0",
       "devDependencies": {
         "@arethetypeswrong/cli": "^0.18.5",
         "@happy-dom/global-registrator": "^20.11.2",
@@ -11,12 +24,9 @@
         "@testing-library/react": "^16.3.2",
         "@types/react": "^19.0.0",
         "@types/react-dom": "^19.0.0",
-        "bun-types": "^1.3.14",
-        "prettier": "3.9.6",
         "publint": "^0.3.25",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
-        "typescript": "^5.9.3",
       },
       "peerDependencies": {
         "react": "^18.0.0 || ^19.0.0",
@@ -39,6 +49,8 @@
     "@braidai/lang": ["@braidai/lang@1.1.2", "", {}, "sha512-qBcknbBufNHlui137Hft8xauQMTZDKdophmLFv05r2eNmdIv/MlPuP4TdUknHG68UdWLgVZwgxVe735HzJNIwA=="],
 
     "@colors/colors": ["@colors/colors@1.5.0", "", {}, "sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ=="],
+
+    "@data-profile/fingerprint": ["@data-profile/fingerprint@workspace:packages/fingerprint"],
 
     "@happy-dom/global-registrator": ["@happy-dom/global-registrator@20.14.6", "", { "dependencies": { "@types/node": ">=20.0.0", "happy-dom": "^20.14.6" } }, "sha512-Xd2FwCdm0cAZ+EG0upp69tpxBT9jtvVxaZv1lnbgWsNaZyEuPs0PojYgvCmtQ1RRdRCYCyWTeLjn3Z0aSxDchA=="],
 

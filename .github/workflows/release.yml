@@ -18,8 +18,8 @@ jobs:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     outputs:
-      release_created: ${{ steps.release.outputs.release_created }}
-      tag_name: ${{ steps.release.outputs.tag_name }}
+      releases_created: ${{ steps.release.outputs.releases_created }}
+      paths_released: ${{ steps.release.outputs.paths_released }}
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
@@ -30,7 +30,7 @@ jobs:
   publish:
     needs: release-please
     # `always()` lets a manual dry run proceed although release-please was skipped.
-    if: always() && (github.event_name == 'workflow_dispatch' || needs.release-please.outputs.release_created == 'true')
+    if: always() && (github.event_name == 'workflow_dispatch' || needs.release-please.outputs.releases_created == 'true')
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -49,15 +49,19 @@ jobs:
       - run: bun test
       - run: bun run build
       - run: bun run lint:package
+      # A dry run covers every package; a release publishes only the packages it released.
       - name: Dry run
         if: github.event_name == 'workflow_dispatch'
-        run: npm publish --dry-run --access public
+        run: for dir in packages/*/; do (cd "$dir" && npm publish --dry-run --access public); done
       - name: Publish with provenance
         if: github.event_name == 'push'
         # Trusted publishing (OIDC) needs no token, and no .npmrc. Set the NPM_TOKEN secret only
         # if a token is needed (for example, a first publish before a trusted publisher exists).
         run: |
           if [ -n "$NPM_TOKEN" ]; then echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc; fi
-          npm publish --provenance --access public
+          for dir in $(echo "$PATHS_RELEASED" | jq -r '.[]'); do
+            (cd "$dir" && npm publish --provenance --access public)
+          done
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          PATHS_RELEASED: ${{ needs.release-please.outputs.paths_released }}

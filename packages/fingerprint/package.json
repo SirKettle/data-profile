@@ -1,0 +1,74 @@
+{
+  "name": "@data-profile/fingerprint",
+  "version": "0.1.0",
+  "description": "Draw any collection as a deterministic fingerprint: one mark per item along real-looking ridges, grouped and coloured by your own categories, with pluggable renderers.",
+  "license": "MIT",
+  "author": "Will Thirkettle",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SirKettle/data-profile.git",
+    "directory": "packages/fingerprint"
+  },
+  "homepage": "https://sirkettle.github.io/data-profile/",
+  "bugs": {
+    "url": "https://github.com/SirKettle/data-profile/issues"
+  },
+  "keywords": [
+    "react",
+    "svg",
+    "fingerprint",
+    "collection",
+    "visualisation",
+    "data-visualization",
+    "categorical",
+    "deterministic",
+    "accessible"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.js"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "bun run scripts/build.ts",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.examples.json",
+    "api:report": "bun run scripts/build.ts --api-report",
+    "lint:package": "publint && attw --pack . --profile esm-only --exclude-entrypoints ./styles.css",
+    "check:consumer": "bun run scripts/check-consumer.ts"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@happy-dom/global-registrator": "^20.11.2",
+    "@microsoft/api-extractor": "^7.59.4",
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "publint": "^0.3.25",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

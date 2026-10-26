@@ -1,4 +1,4 @@
-// The documentation site. Every demo on it imports the package from ../src, so the docs always run
+// The documentation site. Every demo on it imports the package source from ../packages, so the docs always run
 // the code in this commit, and every page shows the very file its demo runs.
 import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
@@ -11,26 +11,29 @@ const fromRoot = (file) => fileURLToPath(new URL(`../${file}`, import.meta.url))
 
 export default defineConfig({
   site: "https://sirkettle.github.io",
-  base: "/collection-fingerprint",
+  base: "/data-profile",
   integrations: [
     react(),
     starlight({
-      title: "collection-fingerprint",
+      title: "data-profile",
       description:
         "Draw any collection as a deterministic fingerprint: one mark per item along real-looking ridges.",
       social: [
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/SirKettle/collection-fingerprint",
+          href: "https://github.com/SirKettle/data-profile",
         },
       ],
-      editLink: { baseUrl: "https://github.com/SirKettle/collection-fingerprint/edit/main/site/" },
+      editLink: { baseUrl: "https://github.com/SirKettle/data-profile/edit/main/site/" },
       customCss: ["./src/styles/demo.css"],
       plugins: [
         starlightLinksValidator({ errorOnRelativeLinks: false }),
         starlightTypeDoc({
-          entryPoints: [fromRoot("src/index.ts"), fromRoot("src/react/index.ts")],
+          entryPoints: [
+            fromRoot("packages/fingerprint/src/index.ts"),
+            fromRoot("packages/fingerprint/src/react/index.ts"),
+          ],
           tsconfig: fileURLToPath(new URL("./tsconfig.typedoc.json", import.meta.url)),
           output: "reference",
           sidebar: { label: "API reference", collapsed: true },
@@ -55,14 +58,17 @@ export default defineConfig({
     resolve: {
       alias: [
         {
-          find: /^@thirkettle\/collection-fingerprint\/styles\.css$/,
-          replacement: fromRoot("styles.css"),
+          find: /^@data-profile\/fingerprint\/styles\.css$/,
+          replacement: fromRoot("packages/fingerprint/styles.css"),
         },
         {
-          find: /^@thirkettle\/collection-fingerprint\/react$/,
-          replacement: fromRoot("src/react/index.ts"),
+          find: /^@data-profile\/fingerprint\/react$/,
+          replacement: fromRoot("packages/fingerprint/src/react/index.ts"),
         },
-        { find: /^@thirkettle\/collection-fingerprint$/, replacement: fromRoot("src/index.ts") },
+        {
+          find: /^@data-profile\/fingerprint$/,
+          replacement: fromRoot("packages/fingerprint/src/index.ts"),
+        },
       ],
     },
   },

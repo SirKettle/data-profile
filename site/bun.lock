@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "collection-fingerprint-docs",
+      "name": "data-profile-docs",
       "dependencies": {
         "@astrojs/react": "^7.0.1",
         "@astrojs/starlight": "^0.42.6",

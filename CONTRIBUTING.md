@@ -3,29 +3,41 @@
 Thank you for helping. Issues and pull requests are welcome; for anything larger than a fix, open
 an issue first so we can agree the shape before you build it.
 
+## The repository
+
+A Bun workspace. Each package under `packages/` is published to npm on its own:
+
+- `packages/fingerprint`: `@data-profile/fingerprint`.
+
+`site/` is the documentation site; its demos import the packages from source.
+
 ## The loop
+
+Run from the root, these cover every package; run inside `packages/<name>` for just that one.
 
 ```sh
 bun install
 bun test             # unit, component, boundary and README-example tests (happy-dom, no browser)
-bun run typecheck    # the package, its scripts and the README examples
-bun run build        # dist/, checked against the API reports and the size budget
+bun run typecheck    # the packages, their scripts, README examples and the docs demos
+bun run build        # each package's dist/, checked against its API reports and size budget
 bun run format       # Prettier
 ```
 
-Bun 1.3 or later is needed to develop the package; consumers need only npm and Node 20+.
+Bun 1.3 or later is needed to develop the packages; consumers need only npm and Node 20+.
 
 ### Working on the package inside an app
 
 ```sh
-bun run build && bun link                          # here: register the package
-bun link @thirkettle/collection-fingerprint        # in the app
+bun run build && bun link              # in packages/fingerprint: register the package
+bun link @data-profile/fingerprint     # in the app
 ```
 
-Rebuild here after each change (`bun run build`), and the app picks it up. The app imports `dist/`,
+Rebuild the package after each change (`bun run build`), and the app picks it up. The app imports `dist/`,
 exactly as it would from npm.
 
 ## Rules the tests enforce
+
+Paths are relative to each package.
 
 - `src/architecture.test.ts` keeps the boundary: no consumer vocabulary, no React outside
   `src/react/`, no runtime dependencies. If a test there fails, the design has moved: talk about it
@@ -36,7 +48,7 @@ exactly as it would from npm.
 
 ## Changing the public API
 
-The API reports in `api/` are the public contract. If your change alters what consumers can import
+Each package's API reports in `api/` are its public contract. If your change alters what consumers can import
 or call, run `bun run api:report` and commit the updated reports with it; `bun run build` (and CI)
 fails if they differ. Every public member needs a doc comment.
 
@@ -54,14 +66,15 @@ release-please writes the CHANGELOG and picks the version from them:
 ## Releasing
 
 1. Merging to `main` makes release-please open (or update) a release pull request with the next
-   version and CHANGELOG.
-2. Merging that pull request tags the release, and the release workflow publishes to npm from CI,
-   with provenance. Nobody publishes from a laptop.
+   version and CHANGELOG of each package a commit touched. Packages are versioned independently and
+   tagged `<package>-v<version>`.
+2. Merging that pull request tags the releases, and the release workflow publishes the released
+   packages to npm from CI, with provenance. Nobody publishes from a laptop.
 3. Before a release, run the **Release** workflow by hand (`workflow_dispatch`): it builds, checks
-   and runs `npm publish --dry-run`.
+   and runs `npm publish --dry-run` for every package.
 
 ## Versioning
 
 [Semantic Versioning](https://semver.org/). While the version is 0.x, a minor version may break the
 API (and says how in the CHANGELOG); a patch never does. From 1.0, only a major version breaks.
-The peer range in `package.json` is the one CI tests: React 18 and 19.
+The peer range in each `package.json` is the one CI tests: React 18 and 19.

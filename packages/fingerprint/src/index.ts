@@ -1,5 +1,5 @@
 /**
- * `@thirkettle/collection-fingerprint`: the layout, as plain data, with no React. Lay items out
+ * `@data-profile/fingerprint`: the layout, as plain data, with no React. Lay items out
  * with `layoutFingerprint`, derive a form with `formFromItems`, describe it with `describeLayout`.
  *
  * @packageDocumentation

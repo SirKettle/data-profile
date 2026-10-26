@@ -1,5 +1,5 @@
-import { markOpacity } from "@thirkettle/collection-fingerprint";
-import type { FingerprintRenderer } from "@thirkettle/collection-fingerprint/react";
+import { markOpacity } from "@data-profile/fingerprint";
+import type { FingerprintRenderer } from "@data-profile/fingerprint/react";
 
 const glyphs = ["★", "●", "■", "▲", "◆"];
 

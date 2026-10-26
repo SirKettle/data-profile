@@ -1,4 +1,4 @@
-import type { FingerprintAnnotation } from "@thirkettle/collection-fingerprint";
+import type { FingerprintAnnotation } from "@data-profile/fingerprint";
 
 export const annotations: FingerprintAnnotation[] = [
   {

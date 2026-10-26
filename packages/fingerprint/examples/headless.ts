@@ -4,7 +4,7 @@ import {
   layoutFingerprint,
   type FingerprintDimension,
   type FingerprintItem,
-} from "@thirkettle/collection-fingerprint";
+} from "@data-profile/fingerprint";
 
 export function summarise(items: FingerprintItem[], dimensions: FingerprintDimension[]) {
   const layout = layoutFingerprint({

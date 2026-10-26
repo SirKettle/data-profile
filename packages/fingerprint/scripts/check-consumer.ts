@@ -18,7 +18,7 @@ if (!(await Bun.file(join(root, "dist/index.js")).exists())) {
   process.exit(1);
 }
 
-const app = await mkdtemp(join(tmpdir(), "collection-fingerprint-consumer-"));
+const app = await mkdtemp(join(tmpdir(), "fingerprint-consumer-"));
 try {
   const packed = await $`npm pack --pack-destination ${app} --silent`.cwd(root).text();
   const tarball = packed.trim().split("\n").pop()!;

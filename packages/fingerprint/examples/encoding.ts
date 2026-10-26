@@ -1,4 +1,4 @@
-import type { FingerprintEncoding } from "@thirkettle/collection-fingerprint";
+import type { FingerprintEncoding } from "@data-profile/fingerprint";
 
 export const encoding: FingerprintEncoding = {
   arrange: "genre",

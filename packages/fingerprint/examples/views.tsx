@@ -1,10 +1,10 @@
-import type { FingerprintDimension, FingerprintItem } from "@thirkettle/collection-fingerprint";
+import type { FingerprintDimension, FingerprintItem } from "@data-profile/fingerprint";
 import {
   FingerprintCanvas,
   FingerprintViewSwitch,
   useFingerprint,
   type FingerprintView,
-} from "@thirkettle/collection-fingerprint/react";
+} from "@data-profile/fingerprint/react";
 
 const views: FingerprintView[] = [
   {

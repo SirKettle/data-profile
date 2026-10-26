@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // The examples and the consumer check import the package by its published name; resolve that
+    // to the source, so neither needs a build first.
+    "paths": {
+      "@data-profile/fingerprint": ["./src/index.ts"],
+      "@data-profile/fingerprint/react": ["./src/react/index.ts"]
+    }
+  },
+  "include": ["src", "scripts"]
+}

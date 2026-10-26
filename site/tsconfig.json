@@ -6,8 +6,8 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "paths": {
-      "@thirkettle/collection-fingerprint": ["../src/index.ts"],
-      "@thirkettle/collection-fingerprint/react": ["../src/react/index.ts"]
+      "@data-profile/fingerprint": ["../packages/fingerprint/src/index.ts"],
+      "@data-profile/fingerprint/react": ["../packages/fingerprint/src/react/index.ts"]
     }
   }
 }
