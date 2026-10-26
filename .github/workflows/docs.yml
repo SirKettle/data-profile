@@ -1,7 +1,7 @@
 name: Docs
 
 # The documentation site (site/): built and link-checked on every pull request, and deployed to
-# GitHub Pages from main. Its demos import the package from src/, so the site always documents
+# GitHub Pages from main. Its demos import the packages from source, so the site always documents
 # the code in the same commit.
 on:
   push:

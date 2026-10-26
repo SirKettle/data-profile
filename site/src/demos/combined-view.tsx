@@ -1,13 +1,13 @@
 import { useMemo } from "react";
-import type { FingerprintAnnotation } from "@thirkettle/collection-fingerprint";
+import type { FingerprintAnnotation } from "@data-profile/fingerprint";
 import {
   FingerprintCanvas,
   FingerprintLegend,
   FingerprintViewSwitch,
   useFingerprint,
   type FingerprintView,
-} from "@thirkettle/collection-fingerprint/react";
-import "@thirkettle/collection-fingerprint/styles.css";
+} from "@data-profile/fingerprint/react";
+import "@data-profile/fingerprint/styles.css";
 import { dimensions, library } from "./library";
 
 // One combined view showing three things at once, then one view per dimension.

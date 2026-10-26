@@ -1,5 +1,5 @@
 /**
- * `@thirkettle/collection-fingerprint/react`: the canvas, legends, list and view switch, the
+ * `@data-profile/fingerprint/react`: the canvas, legends, list and view switch, the
  * `useFingerprint` hook that wires them together, and the built-in renderers.
  *
  * @packageDocumentation

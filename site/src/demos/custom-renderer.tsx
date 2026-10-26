@@ -1,12 +1,12 @@
 import { useMemo } from "react";
-import { markOpacity } from "@thirkettle/collection-fingerprint";
+import { markOpacity } from "@data-profile/fingerprint";
 import {
   FingerprintCanvas,
   FingerprintLegend,
   useFingerprint,
   type FingerprintRenderer,
-} from "@thirkettle/collection-fingerprint/react";
-import "@thirkettle/collection-fingerprint/styles.css";
+} from "@data-profile/fingerprint/react";
+import "@data-profile/fingerprint/styles.css";
 import { dimensions, library } from "./library";
 
 // A book spine: a rounded bar along the ridge, with a band whose position shows the reading

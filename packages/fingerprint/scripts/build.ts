@@ -5,7 +5,7 @@
  * - **JavaScript:** one ESM file per entry plus a shared chunk, so `.` and `./react` share one copy
  *   of the core at runtime. React is a peer, never bundled.
  * - **Types:** one rolled-up `.d.ts` per entry, from api-extractor. The `./react` declarations
- *   import the core's types from `@thirkettle/collection-fingerprint` rather than repeating them.
+ *   import the core's types from `@data-profile/fingerprint` rather than repeating them.
  *   The build **fails** if the public API differs from `api/*.api.md`: run `bun run api:report`
  *   and commit the reports when a change is meant.
  *
@@ -21,7 +21,7 @@ const dist = join(root, "dist");
 const temp = join(root, "temp");
 const local = process.argv.includes("--api-report");
 const PEERS = ["react", "react/jsx-runtime", "react-dom"];
-const NAME = "@thirkettle/collection-fingerprint";
+const NAME = "@data-profile/fingerprint";
 
 await rm(dist, { recursive: true, force: true });
 await rm(temp, { recursive: true, force: true });

@@ -23,7 +23,7 @@ jobs:
       - run: bun run build
       - run: bun run lint:package
 
-  # The peer range package.json declares is tested, not assumed: each cell installs the packed
+  # The peer range each package.json declares is tested, not assumed: each cell installs the packed
   # package into a fresh npm project, type-checks a consumer under bundler and node16 resolution,
   # and renders it under Node 20.
   peers:
@@ -43,4 +43,4 @@ jobs:
           node-version: 20
       - run: bun install --frozen-lockfile
       - run: bun run build
-      - run: bun run check:consumer ${{ matrix.react }}
+      - run: bun run --cwd packages/fingerprint check:consumer ${{ matrix.react }}

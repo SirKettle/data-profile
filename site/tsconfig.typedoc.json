@@ -1,11 +1,11 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "../packages/fingerprint/tsconfig.json",
   "compilerOptions": { "types": [] },
-  "include": ["../src"],
+  "include": ["../packages/fingerprint/src"],
   "exclude": [
-    "../src/**/*.test.ts",
-    "../src/**/*.test.tsx",
-    "../src/react/test-setup.ts",
-    "../src/fixtures.ts"
+    "../packages/fingerprint/src/**/*.test.ts",
+    "../packages/fingerprint/src/**/*.test.tsx",
+    "../packages/fingerprint/src/react/test-setup.ts",
+    "../packages/fingerprint/src/fixtures.ts"
   ]
 }

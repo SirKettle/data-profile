@@ -9,13 +9,13 @@ import {
   layoutFingerprint,
   type FingerprintDimension,
   type FingerprintItem,
-} from "@thirkettle/collection-fingerprint";
+} from "@data-profile/fingerprint";
 import {
   FingerprintCanvas,
   FingerprintLegend,
   shapesRenderer,
   type FingerprintRenderer,
-} from "@thirkettle/collection-fingerprint/react";
+} from "@data-profile/fingerprint/react";
 
 const dimensions: FingerprintDimension[] = [
   {

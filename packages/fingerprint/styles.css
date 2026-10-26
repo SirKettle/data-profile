@@ -1,6 +1,6 @@
 /*
- * @thirkettle/collection-fingerprint — optional styles for the legend, list, view switch and
- * callouts. Import once: `import "@thirkettle/collection-fingerprint/styles.css"`. Neutral by
+ * @data-profile/fingerprint — optional styles for the legend, list, view switch and
+ * callouts. Import once: `import "@data-profile/fingerprint/styles.css"`. Neutral by
  * default; theme it through the custom properties below, on any ancestor.
  *
  *   --fp-accent        pressed buttons, focus rings, selected rows   (default: #4f46e5)
