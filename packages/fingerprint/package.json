@@ -1,6 +1,6 @@
 {
   "name": "@data-profile/fingerprint",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Draw any collection as a deterministic fingerprint: one mark per item along real-looking ridges, grouped and coloured by your own categories, with pluggable renderers.",
   "license": "MIT",
   "author": "Will Thirkettle",
