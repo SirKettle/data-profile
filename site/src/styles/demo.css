@@ -1,4 +1,4 @@
-/* Demos sized to fit a docs page. The fingerprint itself needs none of this. */
+/* Demos sized to fit a docs page. The views themselves need none of this. */
 .demo {
   margin: 1.5rem 0 0.5rem;
 }
@@ -8,11 +8,11 @@
   padding: 1rem;
   background: var(--sl-color-bg);
   color: var(--sl-color-text);
-  /* The package's optional stylesheet, themed to match Starlight. */
-  --fp-accent: var(--sl-color-accent);
-  --fp-accent-text: var(--sl-color-black);
-  --fp-muted: var(--sl-color-gray-3);
-  --fp-border: var(--sl-color-gray-5);
+  /* The packages' optional stylesheets, themed to match Starlight. */
+  --dp-accent: var(--sl-color-accent);
+  --dp-accent-text: var(--sl-color-black);
+  --dp-muted: var(--sl-color-gray-3);
+  --dp-border: var(--sl-color-gray-5);
 }
 .demo figcaption {
   font-size: var(--sl-text-sm);

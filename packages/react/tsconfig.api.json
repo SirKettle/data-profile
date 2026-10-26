@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "temp/dts",
+    "rootDir": "src",
+    "types": [],
+    // Declarations import @data-profile/core by name, resolved as a consumer would (from
+    // node_modules, built), not from source; keeping the symlinked path is what makes
+    // api-extractor treat it as external.
+    "paths": {},
+    "preserveSymlinks": true
+  },
+  "include": ["src"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/test-setup.ts", "src/fixtures.ts"]
+}

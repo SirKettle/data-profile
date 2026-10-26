@@ -16,6 +16,7 @@ export function layoutWaffle(input: WaffleInput): WaffleLayout;
 // @public
 export interface WaffleCell extends Mark {
     column: number;
+    rotation: number;
     row: number;
     size: number;
     x: number;

@@ -1,0 +1,110 @@
+/*
+ * @data-profile/react — optional styles for the legend, list and view switch every view shares.
+ * Import once: `import "@data-profile/react/styles.css"` (a view's own stylesheet includes it).
+ * Neutral by default; theme it through the custom properties below, on any ancestor.
+ *
+ *   --dp-accent        pressed buttons, focus rings, selected rows   (default: #4f46e5)
+ *   --dp-accent-text   text on the accent                           (default: #ffffff)
+ *   --dp-muted         counts, headings, captions                   (default: color-mix of currentColor)
+ *   --dp-border        button and table rules                       (default: color-mix of currentColor)
+ *   --dp-radius        button corners                               (default: 8px)
+ */
+
+.dp-views {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+.dp-views__view {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 1px solid var(--dp-border, color-mix(in srgb, currentColor 22%, transparent));
+  border-radius: var(--dp-radius, 8px);
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+}
+.dp-views__view[aria-pressed="true"] {
+  background: var(--dp-accent, #4f46e5);
+  color: var(--dp-accent-text, #ffffff);
+  border-color: transparent;
+}
+
+.dp-legend__heading {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dp-muted, color-mix(in srgb, currentColor 65%, transparent));
+}
+.dp-legend ul {
+  display: grid;
+  gap: 2px;
+}
+.dp-legend__entry {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.dp-legend__toggle {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.2rem 0.4rem;
+  border-radius: calc(var(--dp-radius, 8px) * 0.75);
+  cursor: pointer;
+}
+.dp-legend__toggle[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--dp-accent, #4f46e5) 16%, transparent);
+}
+.dp-legend__swatch {
+  flex: none;
+  font-size: 1.15rem;
+}
+.dp-legend__count {
+  margin-left: auto;
+  color: var(--dp-muted, color-mix(in srgb, currentColor 65%, transparent));
+  font-variant-numeric: tabular-nums;
+}
+
+.dp-views__view:focus-visible,
+.dp-legend__toggle:focus-visible,
+.dp-list__toggle:focus-visible {
+  outline: 2px solid var(--dp-accent, #4f46e5);
+  outline-offset: 2px;
+}
+
+.dp-list {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.dp-list caption {
+  text-align: left;
+  font-weight: 600;
+  padding-bottom: 0.4rem;
+}
+.dp-list th,
+.dp-list td {
+  text-align: left;
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid var(--dp-border, color-mix(in srgb, currentColor 22%, transparent));
+}
+.dp-list__toggle {
+  all: unset;
+  cursor: pointer;
+}
+.dp-list__toggle[aria-pressed="true"] {
+  font-weight: 700;
+}
+.dp-list__hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

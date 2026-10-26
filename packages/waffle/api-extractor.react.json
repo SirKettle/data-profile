@@ -1,0 +1,17 @@
+{
+  "extends": "./api-extractor.base.json",
+  "mainEntryPointFilePath": "<projectFolder>/temp/dts/react/index.d.ts",
+  "apiReport": {
+    "enabled": true,
+    "reportFileName": "react.api.md",
+    "reportFolder": "<projectFolder>/api/",
+    "reportTempFolder": "<projectFolder>/temp/"
+  },
+  "dtsRollup": {
+    "enabled": true,
+    "untrimmedFilePath": "<projectFolder>/temp/rollup/react.d.ts"
+  },
+  "compiler": {
+    "tsconfigFilePath": "<projectFolder>/tsconfig.api-react.json"
+  }
+}

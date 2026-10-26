@@ -1,4 +1,5 @@
-import { useCallback, useMemo, useState } from "react";
+import { useViews, type GroupBinding } from "@data-profile/react";
+import { useMemo } from "react";
 import { describeLayout } from "../describe";
 import { formFromItems } from "../form";
 import { emptyLayout, FingerprintDataError, layoutFingerprint } from "../layout";
@@ -49,15 +50,8 @@ export interface FingerprintCanvasBinding {
   unit: string;
 }
 
-/** Props for `FingerprintLegend` or `FingerprintList`, for one legend group, ready to spread. */
-export interface FingerprintGroupBinding {
-  /** The legend group. */
-  group: FingerprintLegendGroup;
-  /** The current selection. */
-  selected: FingerprintSelection | null;
-  /** Updates the selection. */
-  onSelect: (selection: FingerprintSelection | null) => void;
-}
+/** Props for `FingerprintLegend` or `FingerprintList`, for one legend group, ready to spread. `@data-profile/react`'s `GroupBinding`. */
+export type FingerprintGroupBinding = GroupBinding;
 
 /** What `useFingerprint` returns. */
 export interface FingerprintState {
@@ -89,29 +83,24 @@ export interface FingerprintState {
 
 /**
  * The state a fingerprint needs: the active view, the selected category, the layout for both, and
- * prop bundles that wire them to the components. The form is derived from all the items and
- * dimensions, never the active view, so the ridges hold still and only the marks move when the
- * view changes. Changing view clears the selection. Invalid data comes back as `error` with an
- * empty layout, rather than throwing out of render.
+ * prop bundles that wire them to the components. The view and selection are `@data-profile/react`'s
+ * `useViews`. The form is derived from all the items and dimensions, never the active view, so the
+ * ridges hold still and only the marks move when the view changes. Changing view clears the
+ * selection. Invalid data comes back as `error` with an empty layout, rather than throwing out of
+ * render.
  */
 export function useFingerprint({
   items,
   dimensions,
-  views: given,
+  views,
   initialViewId,
   form,
   seed = "fingerprint",
   maxMarks,
   unit = "items",
 }: UseFingerprintOptions): FingerprintState {
-  const views = useMemo<readonly FingerprintView[]>(
-    () =>
-      given ?? dimensions.map((d) => ({ id: d.id, label: d.label, encoding: { arrange: d.id } })),
-    [given, dimensions],
-  );
-  const [viewId, setView] = useState(initialViewId ?? views[0]?.id ?? "");
-  const [selected, setSelected] = useState<FingerprintSelection | null>(null);
-  const view = views.find((v) => v.id === viewId) ?? views[0];
+  const state = useViews({ dimensions, views, initialViewId, unit });
+  const { view, selected, setSelected } = state;
   const resolvedForm = useMemo(
     () => ({ ...formFromItems(items, dimensions, seed), ...form }),
     [items, dimensions, seed, form],
@@ -136,34 +125,9 @@ export function useFingerprint({
     () => (error ? error.message : describeLayout(layout, unit)),
     [layout, error, unit],
   );
-  const setViewId = useCallback((id: string) => {
-    setView(id);
-    setSelected(null);
-  }, []);
   const canvasProps = useMemo(
     () => ({ layout, description, selected, onSelect: setSelected, unit }),
-    [layout, description, selected, unit],
+    [layout, description, selected, setSelected, unit],
   );
-  const legendProps = useCallback(
-    (group: FingerprintLegendGroup) => ({ group, selected, onSelect: setSelected }),
-    [selected],
-  );
-  const listProps = useCallback(
-    (group: FingerprintLegendGroup) => ({ group, selected, onSelect: setSelected, unit }),
-    [selected, unit],
-  );
-  return {
-    layout,
-    description,
-    error,
-    views,
-    view,
-    viewId: view?.id ?? "",
-    setViewId,
-    selected,
-    setSelected,
-    canvasProps,
-    legendProps,
-    listProps,
-  };
+  return { ...state, layout, description, error, canvasProps };
 }

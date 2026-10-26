@@ -44,7 +44,8 @@ const html = renderToString(
   ),
 );
 
-const marks = (html.match(/class="fp-mark[" ]/g) ?? []).length;
+// Marks carry the shared `dp-mark` class and the fingerprint's own `fp-mark`.
+const marks = (html.match(/class="dp-mark fp-mark"/g) ?? []).length;
 if (marks !== 30) throw new Error(`expected 30 marks, rendered ${marks}`);
 if (!html.includes(description)) throw new Error("the description is missing");
 try {

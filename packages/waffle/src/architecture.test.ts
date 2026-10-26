@@ -32,9 +32,10 @@ describe("waffle boundary", () => {
     expect(offenders).toEqual([]);
   });
 
-  test("imports only its own modules and @data-profile/core", async () => {
+  test("the layout imports only its own modules and @data-profile/core", async () => {
     const offenders: string[] = [];
     for (const file of await sources()) {
+      if (file.startsWith("src/react/")) continue;
       const text = await Bun.file(`${ROOT}/${file}`).text();
       for (const [, specifier] of text.matchAll(/from\s+["']([^"']+)["']/g))
         if (!/^(\.\/|bun|@data-profile\/core$)/.test(specifier!))
@@ -43,9 +44,26 @@ describe("waffle boundary", () => {
     expect(offenders).toEqual([]);
   });
 
-  test("depends at runtime on @data-profile/core alone", async () => {
+  test("src/react adds only React and @data-profile/react, never another view", async () => {
+    const offenders: string[] = [];
+    const allowed =
+      /^(\.\.?\/|bun|react$|react\/|@data-profile\/(core|react)$|@testing-library\/|@happy-dom\/)/;
+    for (const file of await sources()) {
+      if (!file.startsWith("src/react/")) continue;
+      const text = await Bun.file(`${ROOT}/${file}`).text();
+      for (const [, specifier] of text.matchAll(/from\s+["']([^"']+)["']/g))
+        if (!allowed.test(specifier!)) offenders.push(`${file}: ${specifier}`);
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  test("depends on core and the shared React package, with React an optional peer", async () => {
     const manifest = await Bun.file(`${ROOT}/package.json`).json();
-    expect(Object.keys(manifest.dependencies ?? {})).toEqual(["@data-profile/core"]);
-    expect(manifest.peerDependencies ?? {}).toEqual({});
+    expect(Object.keys(manifest.dependencies ?? {})).toEqual([
+      "@data-profile/core",
+      "@data-profile/react",
+    ]);
+    expect(Object.keys(manifest.peerDependencies ?? {})).toEqual(["react"]);
+    expect(manifest.peerDependenciesMeta?.react?.optional).toBe(true);
   });
 });

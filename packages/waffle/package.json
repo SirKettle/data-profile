@@ -18,16 +18,26 @@
     "waffle",
     "waffle-chart",
     "unit-chart",
+    "react",
+    "svg",
     "visualisation",
     "data-visualization",
     "categorical",
     "deterministic"
+  ],
+  "sideEffects": [
+    "*.css"
   ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.js"
+    },
+    "./styles.css": "./dist/styles.css",
     "./package.json": "./package.json"
   },
   "files": [
@@ -40,19 +50,34 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@data-profile/core": "^0.1.0"
+    "@data-profile/core": "^0.1.0",
+    "@data-profile/react": "^0.0.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
   },
   "scripts": {
     "build": "bun run scripts/build.ts",
     "test": "bun test",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.examples.json",
     "api:report": "bun run scripts/build.ts --api-report",
-    "lint:package": "publint && attw --pack . --profile esm-only",
+    "lint:package": "publint && attw --pack . --profile esm-only --exclude-entrypoints ./styles.css",
     "check:consumer": "bun run scripts/check-consumer.ts"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
+    "@happy-dom/global-registrator": "^20.11.2",
     "@microsoft/api-extractor": "^7.59.4",
-    "publint": "^0.3.25"
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "publint": "^0.3.25",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   }
 }

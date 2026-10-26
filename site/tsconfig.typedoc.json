@@ -3,11 +3,16 @@
   "compilerOptions": {
     "types": []
   },
-  "include": ["../packages/core/src", "../packages/fingerprint/src", "../packages/waffle/src"],
+  "include": [
+    "../packages/core/src",
+    "../packages/react/src",
+    "../packages/fingerprint/src",
+    "../packages/waffle/src"
+  ],
   "exclude": [
     "../packages/*/src/**/*.test.ts",
     "../packages/*/src/**/*.test.tsx",
-    "../packages/fingerprint/src/react/test-setup.ts",
+    "../packages/*/src/**/test-setup.ts",
     "../packages/*/src/fixtures.ts"
   ]
 }

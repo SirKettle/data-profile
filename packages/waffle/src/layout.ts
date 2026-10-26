@@ -38,6 +38,7 @@ export function layoutWaffle(input: WaffleInput): WaffleLayout {
       x: (column + 0.5) * pitch,
       y: (row + 0.5) * pitch,
       size: pitch * (1 - gap) * Math.sqrt(mark.weight / heaviest),
+      rotation: 0,
       column,
       row,
     };
@@ -52,5 +53,22 @@ export function layoutWaffle(input: WaffleInput): WaffleLayout {
     columns,
     rows,
     pitch,
+  };
+}
+
+/** A layout with nothing in it: what `useWaffle` shows while its data is invalid. */
+export function emptyWaffle(): WaffleLayout {
+  return {
+    width: WIDTH,
+    height: WIDTH,
+    encoding: { arrange: "", color: null, shape: null, lightness: null },
+    legends: [],
+    warnings: [],
+    itemsPerMark: 1,
+    itemCount: 0,
+    cells: [],
+    columns: 1,
+    rows: 0,
+    pitch: WIDTH,
   };
 }

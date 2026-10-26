@@ -44,14 +44,15 @@ describe("public surface", () => {
     ]);
   });
 
-  test("the optional stylesheet uses colour only as a fallback inside a custom property", async () => {
+  test("the optional stylesheet uses colour only as a fallback inside a --dp- custom property", async () => {
     const css = (await Bun.file(`${import.meta.dir}/../../styles.css`).text()).replace(
       /\/\*[\s\S]*?\*\//g,
       "",
     );
-    const literals = css.match(/#[0-9a-fA-F]{3,8}\b/g) ?? [];
-    expect(literals.length).toBeGreaterThan(0);
-    for (const literal of literals)
-      expect(css).toMatch(new RegExp(`var\\(--fp-[a-z-]+, ${literal}\\)`));
+    for (const literal of css.match(/#[0-9a-fA-F]{3,8}\b/g) ?? [])
+      expect(css).toMatch(new RegExp(`var\\(--dp-[a-z-]+, ${literal}\\)`));
+    // The legend, list and view switch are styled by @data-profile/react's stylesheet, which the
+    // build puts first in dist/styles.css; custom properties are --dp-* everywhere.
+    expect(css).not.toMatch(/--fp-|\.fp-(legend|list|views)/);
   });
 });

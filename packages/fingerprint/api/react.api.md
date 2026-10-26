@@ -4,22 +4,33 @@
 
 ```ts
 
+import { CategoryList } from '@data-profile/react';
+import { CategoryListProps } from '@data-profile/react';
+import { dotsRenderer } from '@data-profile/react';
 import type { FingerprintAnnotation } from '@data-profile/fingerprint';
 import { FingerprintDataError } from '@data-profile/fingerprint';
 import type { FingerprintDimension } from '@data-profile/fingerprint';
-import type { FingerprintEncoding } from '@data-profile/fingerprint';
 import type { FingerprintForm } from '@data-profile/fingerprint';
 import type { FingerprintItem } from '@data-profile/fingerprint';
 import type { FingerprintLayout } from '@data-profile/fingerprint';
 import type { FingerprintLegendGroup } from '@data-profile/fingerprint';
 import type { FingerprintNode } from '@data-profile/fingerprint';
+import { GroupBinding } from '@data-profile/react';
 import { JSX } from 'react';
+import { Legend } from '@data-profile/react';
+import { LegendProps } from '@data-profile/react';
 import { markOpacity } from '@data-profile/core';
-import type { ReactNode } from 'react';
+import type { MarkProps } from '@data-profile/react';
+import { Motion } from '@data-profile/react';
+import type { Renderer } from '@data-profile/react';
 import type { RidgeStyle } from '@data-profile/fingerprint';
+import { Selection as Selection_2 } from '@data-profile/react';
+import { shapesRenderer } from '@data-profile/react';
+import { View } from '@data-profile/react';
+import { ViewSwitch } from '@data-profile/react';
+import { ViewSwitchProps } from '@data-profile/react';
 
-// @public
-export const dotsRenderer: FingerprintRenderer;
+export { dotsRenderer }
 
 // @public
 export interface FingerprintCallouts {
@@ -56,67 +67,31 @@ export interface FingerprintCanvasProps {
 }
 
 // @public
-export interface FingerprintGroupBinding {
-    group: FingerprintLegendGroup;
-    onSelect: (selection: FingerprintSelection | null) => void;
-    selected: FingerprintSelection | null;
-}
+export type FingerprintGroupBinding = GroupBinding;
 
 // @public
-export function FingerprintLegend(input: FingerprintLegendProps): JSX.Element;
+export const FingerprintLegend: typeof Legend;
 
 // @public
-export interface FingerprintLegendProps {
-    className?: string;
-    counts?: boolean;
-    group: FingerprintLegendGroup;
-    heading?: boolean;
-    hideEmpty?: boolean;
-    onSelect?: (selection: FingerprintSelection | null) => void;
-    renderer?: FingerprintRenderer;
-    selected?: FingerprintSelection | null;
-}
+export type FingerprintLegendProps = LegendProps;
 
 // @public
-export function FingerprintList(input: FingerprintListProps): JSX.Element;
+export const FingerprintList: typeof CategoryList;
 
 // @public
-export interface FingerprintListProps {
-    className?: string;
-    group: FingerprintLegendGroup;
-    linkLabel?: string;
-    onSelect?: (selection: FingerprintSelection | null) => void;
-    selected?: FingerprintSelection | null;
-    unit?: string;
-}
+export type FingerprintListProps = CategoryListProps;
 
 // @public
-export interface FingerprintMarkProps {
-    idPrefix: string;
-    node: FingerprintNode;
-}
+export type FingerprintMarkProps = MarkProps<FingerprintNode>;
 
 // @public
-export interface FingerprintMotion {
-    fade?: number;
-    glide?: number;
-}
+export type FingerprintMotion = Motion;
 
 // @public
-export interface FingerprintRenderer {
-    defs?: (props: {
-        idPrefix: string;
-        legends: readonly FingerprintLegendGroup[];
-    }) => ReactNode;
-    mark: (props: FingerprintMarkProps) => ReactNode;
-    name: string;
-}
+export type FingerprintRenderer = Renderer<FingerprintNode>;
 
 // @public
-export interface FingerprintSelection {
-    categoryId: string;
-    dimensionId: string;
-}
+export type FingerprintSelection = Selection_2;
 
 // @public
 export interface FingerprintState {
@@ -137,28 +112,17 @@ export interface FingerprintState {
 }
 
 // @public
-export interface FingerprintView {
-    encoding: FingerprintEncoding;
-    id: string;
-    label: string;
-}
+export type FingerprintView = View;
 
 // @public
-export function FingerprintViewSwitch(input: FingerprintViewSwitchProps): JSX.Element;
+export const FingerprintViewSwitch: typeof ViewSwitch;
 
 // @public
-export interface FingerprintViewSwitchProps {
-    className?: string;
-    label?: string;
-    onChange: (viewId: string) => void;
-    value: string;
-    views: readonly FingerprintView[];
-}
+export type FingerprintViewSwitchProps = ViewSwitchProps;
 
 export { markOpacity }
 
-// @public
-export const shapesRenderer: FingerprintRenderer;
+export { shapesRenderer }
 
 // @public
 export function useFingerprint(input: UseFingerprintOptions): FingerprintState;
