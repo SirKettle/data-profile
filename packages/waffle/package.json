@@ -1,6 +1,6 @@
 {
   "name": "@data-profile/waffle",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Draw any categorical dataset as a waffle: one cell per item in a grid, filled in reading order so each category is a run.",
   "license": "MIT",
   "author": "Will Thirkettle",
@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@data-profile/core": "^0.1.0",
-    "@data-profile/react": "^0.0.0"
+    "@data-profile/react": "^0.1.0"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0"

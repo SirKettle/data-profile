@@ -1,6 +1,6 @@
 {
   "name": "@data-profile/fingerprint",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Draw any collection as a deterministic fingerprint: one mark per item along real-looking ridges, grouped and coloured by your own categories, with pluggable renderers.",
   "license": "MIT",
   "author": "Will Thirkettle",
@@ -59,7 +59,7 @@
   },
   "dependencies": {
     "@data-profile/core": "^0.1.0",
-    "@data-profile/react": "^0.0.0"
+    "@data-profile/react": "^0.1.0"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0"
