@@ -1,6 +1,7 @@
 /**
- * Installs the packed package, with the packed `@data-profile/core` it depends on, into a fresh npm
- * project, as a consumer would, and proves it works there: type-checked under `bundler` and
+ * Installs the packed package, with the packed `@data-profile/core` and `@data-profile/react` it
+ * depends on, into a fresh npm project, as a consumer would, and proves it works there: type-checked
+ * under `bundler` and
  * `node16` resolution, then run under plain Node (a server render of the canvas and a legend). The
  * React version is an argument, so CI runs it as a matrix.
  *
@@ -16,17 +17,19 @@ const [react = "19"] = process.argv.slice(2);
 const root = join(import.meta.dir, "..");
 if (
   !(await Bun.file(join(root, "dist/index.js")).exists()) ||
-  !(await Bun.file(join(root, "../core/dist/index.js")).exists())
+  !(await Bun.file(join(root, "../core/dist/index.js")).exists()) ||
+  !(await Bun.file(join(root, "../react/dist/index.js")).exists())
 ) {
   console.error(
-    "check-consumer: no dist/ here or in ../core; run `bun run build` at the root first",
+    "check-consumer: no dist/ here, in ../core or in ../react; run `bun run build` at the root first",
   );
   process.exit(1);
 }
 
 const app = await mkdtemp(join(tmpdir(), "fingerprint-consumer-"));
 try {
-  // Core is packed from the workspace too: the check is of the two as they would be published.
+  // Its dependencies are packed from the workspace too: the check is of the three as they would be
+  // published.
   const pack = async (dir: string) =>
     join(
       app,
@@ -35,7 +38,11 @@ try {
         .split("\n")
         .pop()!,
     );
-  const tarballs = [await pack(join(root, "../core")), await pack(root)];
+  const tarballs = [
+    await pack(join(root, "../core")),
+    await pack(join(root, "../react")),
+    await pack(root),
+  ];
   await Bun.write(
     join(app, "package.json"),
     JSON.stringify({ name: "consumer", private: true, type: "module" }),

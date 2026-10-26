@@ -1,119 +1,20 @@
 /**
- * Builds the package into `dist/`, which is what `package.json` exports and `npm pack` ships:
- * JavaScript, rolled-up declarations and the stylesheet.
- *
- * - **JavaScript:** one ESM file per entry plus a shared chunk, so `.` and `./react` share one copy
- *   of the layout at runtime. React is a peer and `@data-profile/core` a dependency: neither is
- *   bundled.
- * - **Types:** one rolled-up `.d.ts` per entry, from api-extractor. The `./react` declarations
- *   import the layout's types from `@data-profile/fingerprint` rather than repeating them.
- *   The build **fails** if the public API differs from `api/*.api.md`: run `bun run api:report`
- *   and commit the reports when a change is meant.
+ * Builds the package into `dist/` (see `scripts/build-package.ts` at the root): `.` and `./react`
+ * sharing one chunk of the layout, their rolled-up declarations, and `styles.css`, which is
+ * `@data-profile/react`'s stylesheet followed by the fingerprint's own, so one import styles
+ * everything. `@data-profile/core`, `@data-profile/react` and React are never bundled.
  *
  *   bun run build              # check the API reports, then build
  *   bun run build --api-report # update the API reports instead of checking them
  */
-import { $ } from "bun";
-import { cp, mkdir, readdir, rm } from "node:fs/promises";
 import { join } from "node:path";
+import { buildPackage } from "../../../scripts/build-package";
 
-const root = join(import.meta.dir, "..");
-const dist = join(root, "dist");
-const temp = join(root, "temp");
-const local = process.argv.includes("--api-report");
-const PEERS = ["react", "react/jsx-runtime", "react-dom"];
-/** Installed beside the package as a dependency, never bundled. */
-const DEPENDENCIES = ["@data-profile/core"];
-const NAME = "@data-profile/fingerprint";
-
-await rm(dist, { recursive: true, force: true });
-await rm(temp, { recursive: true, force: true });
-await mkdir(dist, { recursive: true });
-
-// Declarations: emit, roll up `.`, point ./react's imports of public `.` modules at the
-// package, roll up ./react.
-await $`bunx tsc -p tsconfig.api.json`.cwd(root);
-const extract = (entry: string) =>
-  $`bunx api-extractor run ${local ? ["--local"] : []} -c api-extractor.${entry}.json`
-    .cwd(root)
-    .quiet();
-await extract("index");
-// api-extractor leaves an import as an import only when it resolves into node_modules, so the
-// `.` rollup is installed there under the package's name before ./react is extracted.
-const installed = join(temp, "node_modules", NAME);
-await cp(join(temp, "rollup/index.d.ts"), join(installed, "index.d.ts"));
-await Bun.write(
-  join(installed, "package.json"),
-  JSON.stringify({ name: NAME, types: "index.d.ts" }),
-);
-const reactDts = join(temp, "dts/react");
-for (const file of await readdir(reactDts)) {
-  const path = join(reactDts, file);
-  const text = await Bun.file(path).text();
-  await Bun.write(path, text.replace(/from "\.\.\/(types|layout|opacity)"/g, `from "${NAME}"`));
-}
-await extract("react");
-await cp(join(temp, "rollup/index.d.ts"), join(dist, "index.d.ts"));
-
-// JavaScript. Bundled from a copy of src/ under a manifest without `sideEffects`: Bun 1.3.14 emits
-// entry points that are pure re-export barrels with no code at all when the package declares
-// `sideEffects` (any value, `false` included), and our two entries are exactly that. Bun only
-// treats the copy's manifest as a package boundary when it has a `name`.
-const source = join(temp, "src");
-await cp(join(root, "src"), source, { recursive: true });
-await Bun.write(join(temp, "package.json"), '{ "name": "build-copy", "type": "module" }\n');
-const result = await Bun.build({
-  entrypoints: [join(source, "index.ts"), join(source, "react/index.ts")],
-  outdir: dist,
-  root: source,
-  format: "esm",
-  target: "browser",
-  splitting: true,
-  external: [...PEERS, ...DEPENDENCIES],
-  // Without it Bun compiles JSX for React's development runtime (`jsxDEV`).
-  define: { "process.env.NODE_ENV": '"production"' },
-  naming: { entry: "[dir]/[name].js", chunk: "chunk-[hash].js" },
-  sourcemap: "linked",
+// Measured when the controls moved to @data-profile/react: 5.6 KB and 8.2 KB. Raise a budget
+// deliberately, never silently.
+await buildPackage({
+  root: join(import.meta.dir, ".."),
+  entries: ["index", "react"],
+  styles: ["../react/styles.css", "styles.css"],
+  budget: { index: 7_000, react: 10_000 },
 });
-if (!result.success) {
-  for (const log of result.logs) console.error(log);
-  process.exit(1);
-}
-// Each entry must take the layout from the shared chunk: an entry without that import is the
-// empty-barrel failure above, and a build without a chunk would ship the layout twice.
-for (const output of result.outputs.filter((output) => output.kind === "entry-point"))
-  if (!/from "\.\.?\/chunk-/.test(await output.text()))
-    throw new Error(`build: ${output.path} does not import the shared layout chunk`);
-const built = await Promise.all(result.outputs.map((output) => output.text()));
-if (built.some((text) => text.includes("jsxDEV")))
-  throw new Error("build: JSX compiled for React's development runtime");
-// `src/react/index.ts` lands at `dist/react/index.js`; the rollup sits beside it.
-await cp(join(temp, "rollup/react.d.ts"), join(dist, "react/index.d.ts"));
-await cp(join(root, "styles.css"), join(dist, "styles.css"));
-
-// Size budget, gzipped: what `.` costs alone, and what `./react` adds on top of the shared layout.
-// `@data-profile/core` is not counted: it is its own package, with its own budget. Measured when
-// core moved out: 5.6 KB and 11.4 KB. Raise a budget deliberately, never silently.
-const BUDGET = { layout: 10_000, withReact: 16_000 };
-const gz = (outputs: typeof result.outputs) =>
-  outputs.reduce(
-    (sum, output) => sum + Bun.gzipSync(built[result.outputs.indexOf(output)]!).length,
-    0,
-  );
-const isReact = (output: (typeof result.outputs)[number]) =>
-  output.path === join(dist, "react/index.js");
-const layout = gz(
-  result.outputs.filter((output) => output.path.endsWith(".js") && !isReact(output)),
-);
-const withReact = layout + gz(result.outputs.filter(isReact));
-console.log(
-  `size: . ${(layout / 1000).toFixed(1)} KB, . + ./react ${(withReact / 1000).toFixed(1)} KB gzipped`,
-);
-if (layout > BUDGET.layout || withReact > BUDGET.withReact)
-  throw new Error(
-    `build: over the size budget (${BUDGET.layout} / ${BUDGET.withReact} bytes gzipped)`,
-  );
-
-await rm(temp, { recursive: true, force: true });
-const { name, version } = await Bun.file(join(root, "package.json")).json();
-console.log(`build: ${name}@${version} in dist/`);

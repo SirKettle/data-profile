@@ -99,7 +99,7 @@ describe("fingerprint components", () => {
 
   test("choosing a category in the legend selects its marks and dims the rest; choosing it again clears", () => {
     const { container } = render(<Harness />);
-    const toggle = container.querySelector<HTMLButtonElement>(".fp-legend__toggle")!;
+    const toggle = container.querySelector<HTMLButtonElement>(".dp-legend__toggle")!;
     act(() => toggle.click());
     expect(toggle.getAttribute("aria-pressed")).toBe("true");
     const chosen = selection(container)!;
@@ -121,8 +121,8 @@ describe("fingerprint components", () => {
   test("changing lens keeps every mark, moves them, and clears the selection", () => {
     const { container } = render(<Harness />);
     const before = transforms(container);
-    act(() => container.querySelector<HTMLButtonElement>(".fp-legend__toggle")!.click());
-    const lens = [...container.querySelectorAll<HTMLButtonElement>(".fp-views__view")][1]!;
+    act(() => container.querySelector<HTMLButtonElement>(".dp-legend__toggle")!.click());
+    const lens = [...container.querySelectorAll<HTMLButtonElement>(".dp-views__view")][1]!;
     act(() => lens.click());
     expect(lens.getAttribute("aria-pressed")).toBe("true");
     expect(marks(container)).toHaveLength(items.length);
@@ -134,7 +134,7 @@ describe("fingerprint components", () => {
   test("marks animate between views, and do not under reduced motion", () => {
     const { container } = render(<Harness />);
     const css = container.querySelector(".fp-canvas > style")!.textContent!;
-    expect(css).toMatch(/\.fp-mark\{transition:transform 700ms/);
+    expect(css).toMatch(/\.dp-mark\{transition:transform 700ms/);
     expect(css).toMatch(/@media \(prefers-reduced-motion:reduce\)\{[^}]*\{transition:none\}\}/);
   });
 
@@ -148,9 +148,9 @@ describe("fingerprint components", () => {
       },
     };
     const { container } = render(<Harness renderer={counting} />);
-    const legendSwatches = container.querySelectorAll(".fp-legend__swatch").length;
+    const legendSwatches = container.querySelectorAll(".dp-legend__swatch").length;
     drawn = 0;
-    act(() => container.querySelector<HTMLButtonElement>(".fp-legend__toggle")!.click());
+    act(() => container.querySelector<HTMLButtonElement>(".dp-legend__toggle")!.click());
     // Only the legend's own swatches redraw (they show which entry is pressed); no mark does.
     expect(drawn).toBeLessThanOrEqual(legendSwatches);
     expect(selection(container)!.selected.length).toBeGreaterThan(0);
@@ -192,7 +192,7 @@ describe("fingerprint components", () => {
     const { container } = render(<Harness views={[combined, ...singles]} />);
     expect(marks(container)).toHaveLength(items.length);
     expect(
-      [...container.querySelectorAll(".fp-legend__heading")].map((h) => h.textContent),
+      [...container.querySelectorAll(".dp-legend__heading")].map((h) => h.textContent),
     ).toEqual(["Genre", "Reading state", "Published"]);
     // Three shapes for three reading states, and opacity varying with the decade.
     const kinds = new Set(
@@ -214,8 +214,8 @@ describe("fingerprint components", () => {
 
   test("choosing a category in a legend other than colour selects marks across every colour", () => {
     const { container } = render(<Harness views={[combined]} />);
-    const stateLegend = [...container.querySelectorAll(".fp-legend")][1]!;
-    act(() => stateLegend.querySelector<HTMLButtonElement>(".fp-legend__toggle")!.click());
+    const stateLegend = [...container.querySelectorAll(".dp-legend")][1]!;
+    act(() => stateLegend.querySelector<HTMLButtonElement>(".dp-legend__toggle")!.click());
     const { selected } = selection(container)!;
     const read = items.filter((item) => item.values.state === "read").length;
     expect(selected).toHaveLength(read);
@@ -257,7 +257,7 @@ describe("fingerprint components", () => {
     const before = new Set(marks(container));
     const positions = new Map(marks(container).map((g) => [g, g.style.transform]));
     expect(container.querySelector("desc")!.textContent).toContain("Each mark stands for up to 3");
-    act(() => [...container.querySelectorAll<HTMLButtonElement>(".fp-views__view")][1]!.click());
+    act(() => [...container.querySelectorAll<HTMLButtonElement>(".dp-views__view")][1]!.click());
     const after = marks(container);
     const kept = after.filter((g) => before.has(g));
     // Most elements carry over (a few groups have no counterpart), and carried ones moved.
@@ -280,7 +280,7 @@ describe("fingerprint components", () => {
     const itemOf = new Map(
       marks(container).map((g) => [g, g.firstElementChild!.getAttribute("data-item")]),
     );
-    act(() => [...container.querySelectorAll<HTMLButtonElement>(".fp-views__view")][1]!.click());
+    act(() => [...container.querySelectorAll<HTMLButtonElement>(".dp-views__view")][1]!.click());
     const after = marks(container);
     expect(after.every((g) => itemOf.has(g))).toBe(true);
     expect(
@@ -342,7 +342,7 @@ describe("fingerprint components", () => {
 
   test("a list's shares are of its own group's total", () => {
     const { container } = render(<Harness />);
-    const shares = [...container.querySelectorAll(".fp-list")][0]!.querySelectorAll(
+    const shares = [...container.querySelectorAll(".dp-list")][0]!.querySelectorAll(
       "tbody td:nth-of-type(2)",
     );
     const sum = [...shares].reduce(

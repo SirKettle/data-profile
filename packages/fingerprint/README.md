@@ -336,10 +336,26 @@ and a `className`. The legend also takes `renderer` (match the canvas), `heading
 
 ## Styling
 
-The components are unstyled apart from what layout needs, and every part has an `fp-` class:
-`fp-canvas`, `fp-mark`, `fp-legend`, `fp-legend__toggle`, `fp-list`, `fp-views__view` and others.
-The optional `@data-profile/fingerprint/styles.css` styles them neutrally; theme it with
-`--fp-accent`, `--fp-accent-text`, `--fp-muted`, `--fp-border` and `--fp-radius`.
+The components are unstyled apart from what layout needs, and every part has a class. The legend,
+list, view switch and canvas come from [`@data-profile/react`](../react), shared by every view, so
+their classes are `dp-`: `dp-canvas`, `dp-mark`, `dp-legend`, `dp-legend__toggle`, `dp-list`,
+`dp-views__view` and others. The fingerprint's own parts are `fp-`: `fp-canvas` and `fp-mark` (beside
+the `dp-` ones), `fp-ridges`, `fp-callout` and `fp-callouts`. The optional
+`@data-profile/fingerprint/styles.css` styles them all neutrally; theme it with `--dp-accent`,
+`--dp-accent-text`, `--dp-muted`, `--dp-border`, `--dp-radius` and `--dp-callout-ink`.
+
+### Upgrading from 0.3
+
+The shared parts' classes and every custom property were renamed from `fp-` to `dp-` when they
+moved into `@data-profile/react`:
+
+| Before                                            | After                                             |
+| ------------------------------------------------- | ------------------------------------------------- |
+| `.fp-legend…`, `.fp-list…`, `.fp-views…`          | `.dp-legend…`, `.dp-list…`, `.dp-views…`          |
+| `--fp-accent`, `--fp-muted`, … `--fp-callout-ink` | `--dp-accent`, `--dp-muted`, … `--dp-callout-ink` |
+
+`fp-canvas` and `fp-mark` still work. Nothing else changes: every component, hook and type keeps its
+name and props.
 
 ## Licence
 

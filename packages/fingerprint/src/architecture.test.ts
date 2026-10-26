@@ -15,8 +15,8 @@ const FORBIDDEN_WORDS =
   /\b(lego|studopus|rebrickable|picabase|bricks?|minifig\w*|holdings?|clerk|posthog)\b/i;
 const FORBIDDEN_IMPORTS = [
   /from\s+["']@picabase\//,
-  // A view builds on @data-profile/core alone, never on another view.
-  /from\s+["']@data-profile\/(?!core["'])/,
+  // A view builds on @data-profile/core and @data-profile/react alone, never on another view.
+  /from\s+["']@data-profile\/(?!(core|react)["'])/,
   /from\s+["'](\.\.\/)+(apps|packages)\//,
   /from\s+["']\.\.\/\.\.\//,
 ];
@@ -54,15 +54,22 @@ describe("package boundary", () => {
     for (const file of await sources()) {
       if (file.startsWith("src/react/")) continue;
       const text = await Bun.file(`${ROOT}/${file}`).text();
-      if (/from\s+["'](react|react-dom)(\/[^"']*)?["']|from\s+["']\.\/react\//.test(text))
+      if (
+        /from\s+["'](react|react-dom|@data-profile\/react)(\/[^"']*)?["']|from\s+["']\.\/react\//.test(
+          text,
+        )
+      )
         offenders.push(file);
     }
     expect(offenders).toEqual([]);
   });
 
-  test("depends at runtime on @data-profile/core alone", async () => {
+  test("depends at runtime on @data-profile/core and @data-profile/react alone", async () => {
     const manifest = await Bun.file(`${ROOT}/package.json`).json();
-    expect(Object.keys(manifest.dependencies ?? {})).toEqual(["@data-profile/core"]);
+    expect(Object.keys(manifest.dependencies ?? {})).toEqual([
+      "@data-profile/core",
+      "@data-profile/react",
+    ]);
     expect(Object.keys(manifest.peerDependencies ?? {})).toEqual(["react"]);
   });
 });
