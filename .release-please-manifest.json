@@ -1,3 +1,4 @@
 {
+  "packages/core": "0.0.0",
   "packages/fingerprint": "0.2.0"
 }

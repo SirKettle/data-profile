@@ -59,7 +59,8 @@ jobs:
         # if a token is needed (for example, a first publish before a trusted publisher exists).
         run: |
           if [ -n "$NPM_TOKEN" ]; then echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc; fi
-          for dir in $(echo "$PATHS_RELEASED" | jq -r '.[]'); do
+          # Core first: a view released alongside it depends on the new version.
+          for dir in $(echo "$PATHS_RELEASED" | jq -r 'sort_by(. != "packages/core") | .[]'); do
             (cd "$dir" && npm publish --provenance --access public)
           done
         env:
