@@ -1,0 +1,6 @@
+/*
+ * What `@data-profile/fingerprint/styles.css` is once built, from source: @data-profile/react's
+ * styles, then the fingerprint's own. The demos import the package by name; Vite aliases that here.
+ */
+@import "../../../../packages/react/styles.css";
+@import "../../../../packages/fingerprint/styles.css";

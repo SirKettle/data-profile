@@ -10,14 +10,19 @@ A Bun workspace. Each package under `packages/` is published to npm on its own:
 - `packages/core`: `@data-profile/core`, what every view shares: the data types, `encodeProfile`
   (validation, encoding, ordering, the mark cap, legends) and `describeProfile`. No dependencies,
   no React, and nothing about how marks are placed.
+- `packages/react`: `@data-profile/react`, the React pieces every view shares: `MarkCanvas` (placed
+  marks with motion and selection), `Legend`, `CategoryList`, `ViewSwitch`, `useViews`, the
+  renderers and the `dp-` stylesheet. Knows no view.
 - `packages/fingerprint`: `@data-profile/fingerprint`, a view. It places core's marks along
-  fingerprint ridges and draws them in React.
+  fingerprint ridges; its `./react` adds the ridges and callouts to `MarkCanvas`.
 - `packages/waffle`: `@data-profile/waffle`, a view. It places core's marks in a grid, in reading
-  order. Layout only, for now.
+  order; its `./react` draws them with `MarkCanvas`.
 
-A view depends on core alone, never on another view, and imports it by package name; each
-package's `src/architecture.test.ts` enforces it. Inside the workspace, `tsconfig.base.json` maps
-every package name to its source, so nothing needs building to test or typecheck.
+A view's layout depends on core alone, and its `./react` entry adds `@data-profile/react`; a view
+never depends on another view, and imports packages by name. Each package's
+`src/architecture.test.ts` enforces it. Inside the workspace, `tsconfig.base.json` maps every
+package name to its source, so nothing needs building to test or typecheck. Packages with React
+build through `scripts/build-package.ts`.
 
 `site/` is the documentation site; its demos import the packages from source. `stories/` is a
 [Ladle](https://ladle.dev) workspace with stories for every view, also against source: add a

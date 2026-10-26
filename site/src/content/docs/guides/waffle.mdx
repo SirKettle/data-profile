@@ -11,15 +11,18 @@ import waffle from "../../../demos/waffle.tsx?raw";
 
 A fingerprint is one way to draw a dataset. `@data-profile/waffle` is another: one cell per item in
 a grid, filled left to right and top to bottom, so each category is a run you read like a line of
-text. Both build on `@data-profile/core`, so the items, dimensions and encodings are the same.
+text. Both build on `@data-profile/core`, so the items, dimensions and encodings are the same, and
+on `@data-profile/react`, so the legends, lists, view switch and renderers are too.
 
 ```sh
 npm install @data-profile/waffle @data-profile/core
 ```
 
-`layoutWaffle` returns plain data: each cell's centre and size in a frame 400 wide, with its
-colour, shape and lightness resolved. Pass `columns: 10` with 100 items for the classic one cell
-per percent.
+`useWaffle` and `WaffleCanvas` work like `useFingerprint` and `FingerprintCanvas`: cells glide
+between views, and choosing a legend entry highlights its cells. Underneath, `layoutWaffle` returns
+plain data (each cell's centre and size in a frame 400 wide, with its colour, shape and lightness
+resolved) if you would rather draw it yourself. Pass `columns: 10` with 100 items for the classic
+one cell per percent.
 
 <Demo code={waffle} file="waffle.tsx">
   <Waffle client:only="react" />
