@@ -3,12 +3,15 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "stories"
   ],
   "scripts": {
     "build": "bun run --filter './packages/*' build",
     "test": "bun test",
-    "typecheck": "bun run --filter './packages/*' typecheck && tsc --noEmit -p site/src/demos",
+    "typecheck": "bun run --filter './packages/*' typecheck && tsc --noEmit -p site/src/demos && tsc --noEmit -p stories",
+    "stories": "bun run --cwd stories dev",
+    "stories:build": "bun run --cwd stories build",
     "api:report": "bun run --filter './packages/*' api:report",
     "lint:package": "bun run --filter './packages/*' lint:package",
     "format": "prettier --write .",
