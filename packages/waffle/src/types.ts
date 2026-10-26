@@ -38,6 +38,8 @@ export interface WaffleCell extends Mark {
   y: number;
   /** Width of the mark drawn in the cell. Area is proportional to weight. */
   size: number;
+  /** Always 0: cells face one way. There so a renderer written for any view draws a waffle. */
+  rotation: number;
   /** Zero-based, left to right. */
   column: number;
   /** Zero-based, top to bottom. */

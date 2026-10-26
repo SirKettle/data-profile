@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.api.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "node10",
+    "ignoreDeprecations": "5.0"
+  },
+  "include": ["temp/dts/react"],
+  "exclude": []
+}

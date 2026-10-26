@@ -12,7 +12,7 @@ It is one view of [data-profile](https://github.com/SirKettle/data-profile), bui
 - **Honest.** Cell area is the item's weight, unknown values get cells rather than being dropped,
   and above 1,000 items a cell says how many items it stands for.
 - **Yours to draw.** The layout is plain data: cell centres, sizes and colours in a fixed frame.
-  Render it with SVG, canvas or anything else.
+  Render it with SVG, canvas or anything else, or with the React components.
 
 ## Install
 
@@ -20,7 +20,56 @@ It is one view of [data-profile](https://github.com/SirKettle/data-profile), bui
 npm install @data-profile/waffle @data-profile/core
 ```
 
-## Draw one
+## In React
+
+`@data-profile/waffle/react` draws it for you: cells glide to their new places when the view
+changes, legend entries select and highlight their cells, and the drawing is one described image to
+a screen reader. The legend, list, view switch and renderers are
+[`@data-profile/react`](../react)'s, shared with every view.
+
+<!-- example: react.tsx -->
+
+```tsx
+import type { Dimension, Item } from "@data-profile/core";
+import { Legend, ViewSwitch, WaffleCanvas, useWaffle } from "@data-profile/waffle/react";
+import "@data-profile/waffle/styles.css";
+
+const dimensions: Dimension[] = [
+  {
+    id: "genre",
+    label: "Genre",
+    categories: [
+      { id: "fiction", label: "Fiction" },
+      { id: "poetry", label: "Poetry" },
+    ],
+  },
+  {
+    id: "state",
+    label: "Reading state",
+    categories: [
+      { id: "read", label: "Read" },
+      { id: "unread", label: "Unread" },
+    ],
+  },
+];
+
+export function Library({ items }: { items: readonly Item[] }) {
+  const waffle = useWaffle({ items, dimensions, columns: 10, unit: "books" });
+  return (
+    <>
+      <ViewSwitch views={waffle.views} value={waffle.viewId} onChange={waffle.setViewId} />
+      <WaffleCanvas {...waffle.canvasProps} title="My library" />
+      {waffle.layout.legends.map((group) => (
+        <Legend key={group.dimensionId} {...waffle.legendProps(group)} />
+      ))}
+    </>
+  );
+}
+```
+
+React 18 or 19 is needed only for this entry; the layout works without it.
+
+## Without React
 
 <!-- example: svg.ts -->
 

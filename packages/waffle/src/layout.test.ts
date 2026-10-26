@@ -22,7 +22,10 @@ describe("layoutWaffle", () => {
       maxMarks: 1000,
     });
     expect(layout).toMatchObject(profile);
-    expect(layout.cells.map(({ x, y, size, column, row, ...mark }) => mark)).toEqual(marks);
+    expect(layout.cells.map(({ x, y, size, rotation, column, row, ...mark }) => mark)).toEqual(
+      marks,
+    );
+    expect(layout.cells.every((cell) => cell.rotation === 0)).toBe(true);
   });
 
   test("fills a square grid left to right, then top to bottom, inside the frame", () => {
