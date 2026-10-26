@@ -1,0 +1,70 @@
+{
+  "name": "@data-profile/react",
+  "version": "0.0.0",
+  "description": "The React pieces every data-profile view shares: a canvas for placed marks with motion and selection, legends, lists, a view switch and renderers.",
+  "license": "MIT",
+  "author": "Will Thirkettle",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SirKettle/data-profile.git",
+    "directory": "packages/react"
+  },
+  "homepage": "https://sirkettle.github.io/data-profile/",
+  "bugs": {
+    "url": "https://github.com/SirKettle/data-profile/issues"
+  },
+  "keywords": [
+    "react",
+    "svg",
+    "legend",
+    "visualisation",
+    "data-visualization",
+    "categorical",
+    "accessible"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@data-profile/core": "^0.1.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "scripts": {
+    "build": "bun run scripts/build.ts",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "api:report": "bun run scripts/build.ts --api-report",
+    "lint:package": "publint && attw --pack . --profile esm-only --exclude-entrypoints ./styles.css"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@happy-dom/global-registrator": "^20.11.2",
+    "@microsoft/api-extractor": "^7.59.4",
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "publint": "^0.3.25",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

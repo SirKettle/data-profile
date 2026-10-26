@@ -1,5 +1,6 @@
 {
   "packages/core": "0.1.0",
   "packages/fingerprint": "0.3.0",
+  "packages/react": "0.0.0",
   "packages/waffle": "0.1.0"
 }
