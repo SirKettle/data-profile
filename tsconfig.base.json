@@ -10,6 +10,13 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "noEmit": true,
-    "types": ["bun-types"]
+    "types": ["bun-types"],
+    // Each package imports the others, and examples import their own, by published name; resolve
+    // those to source, so nothing needs building first. Relative to this file.
+    "paths": {
+      "@data-profile/core": ["./packages/core/src/index.ts"],
+      "@data-profile/fingerprint": ["./packages/fingerprint/src/index.ts"],
+      "@data-profile/fingerprint/react": ["./packages/fingerprint/src/react/index.ts"]
+    }
   }
 }

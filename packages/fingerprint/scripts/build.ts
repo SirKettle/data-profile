@@ -3,9 +3,10 @@
  * JavaScript, rolled-up declarations and the stylesheet.
  *
  * - **JavaScript:** one ESM file per entry plus a shared chunk, so `.` and `./react` share one copy
- *   of the core at runtime. React is a peer, never bundled.
+ *   of the layout at runtime. React is a peer and `@data-profile/core` a dependency: neither is
+ *   bundled.
  * - **Types:** one rolled-up `.d.ts` per entry, from api-extractor. The `./react` declarations
- *   import the core's types from `@data-profile/fingerprint` rather than repeating them.
+ *   import the layout's types from `@data-profile/fingerprint` rather than repeating them.
  *   The build **fails** if the public API differs from `api/*.api.md`: run `bun run api:report`
  *   and commit the reports when a change is meant.
  *
@@ -21,13 +22,15 @@ const dist = join(root, "dist");
 const temp = join(root, "temp");
 const local = process.argv.includes("--api-report");
 const PEERS = ["react", "react/jsx-runtime", "react-dom"];
+/** Installed beside the package as a dependency, never bundled. */
+const DEPENDENCIES = ["@data-profile/core"];
 const NAME = "@data-profile/fingerprint";
 
 await rm(dist, { recursive: true, force: true });
 await rm(temp, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
 
-// Declarations: emit, roll up the core, point ./react's imports of public core modules at the
+// Declarations: emit, roll up `.`, point ./react's imports of public `.` modules at the
 // package, roll up ./react.
 await $`bunx tsc -p tsconfig.api.json`.cwd(root);
 const extract = (entry: string) =>
@@ -36,7 +39,7 @@ const extract = (entry: string) =>
     .quiet();
 await extract("index");
 // api-extractor leaves an import as an import only when it resolves into node_modules, so the
-// core's rollup is installed there under the package's name before ./react is extracted.
+// `.` rollup is installed there under the package's name before ./react is extracted.
 const installed = join(temp, "node_modules", NAME);
 await cp(join(temp, "rollup/index.d.ts"), join(installed, "index.d.ts"));
 await Bun.write(
@@ -66,7 +69,7 @@ const result = await Bun.build({
   format: "esm",
   target: "browser",
   splitting: true,
-  external: PEERS,
+  external: [...PEERS, ...DEPENDENCIES],
   // Without it Bun compiles JSX for React's development runtime (`jsxDEV`).
   define: { "process.env.NODE_ENV": '"production"' },
   naming: { entry: "[dir]/[name].js", chunk: "chunk-[hash].js" },
@@ -76,11 +79,11 @@ if (!result.success) {
   for (const log of result.logs) console.error(log);
   process.exit(1);
 }
-// Each entry must take the core from the shared chunk: an entry without that import is the
-// empty-barrel failure above, and a build without a chunk would ship the core twice.
+// Each entry must take the layout from the shared chunk: an entry without that import is the
+// empty-barrel failure above, and a build without a chunk would ship the layout twice.
 for (const output of result.outputs.filter((output) => output.kind === "entry-point"))
   if (!/from "\.\.?\/chunk-/.test(await output.text()))
-    throw new Error(`build: ${output.path} does not import the shared core chunk`);
+    throw new Error(`build: ${output.path} does not import the shared layout chunk`);
 const built = await Promise.all(result.outputs.map((output) => output.text()));
 if (built.some((text) => text.includes("jsxDEV")))
   throw new Error("build: JSX compiled for React's development runtime");
@@ -88,9 +91,10 @@ if (built.some((text) => text.includes("jsxDEV")))
 await cp(join(temp, "rollup/react.d.ts"), join(dist, "react/index.d.ts"));
 await cp(join(root, "styles.css"), join(dist, "styles.css"));
 
-// Size budget, gzipped: what `.` costs alone, and what `./react` adds on top of the shared core.
-// Measured before 0.1.0: 8.4 KB and 14.1 KB. Raise a budget deliberately, never silently.
-const BUDGET = { core: 10_000, withReact: 16_000 };
+// Size budget, gzipped: what `.` costs alone, and what `./react` adds on top of the shared layout.
+// `@data-profile/core` is not counted: it is its own package, with its own budget. Measured when
+// core moved out: 5.6 KB and 11.4 KB. Raise a budget deliberately, never silently.
+const BUDGET = { layout: 10_000, withReact: 16_000 };
 const gz = (outputs: typeof result.outputs) =>
   outputs.reduce(
     (sum, output) => sum + Bun.gzipSync(built[result.outputs.indexOf(output)]!).length,
@@ -98,14 +102,16 @@ const gz = (outputs: typeof result.outputs) =>
   );
 const isReact = (output: (typeof result.outputs)[number]) =>
   output.path === join(dist, "react/index.js");
-const core = gz(result.outputs.filter((output) => output.path.endsWith(".js") && !isReact(output)));
-const withReact = core + gz(result.outputs.filter(isReact));
-console.log(
-  `size: . ${(core / 1000).toFixed(1)} KB, . + ./react ${(withReact / 1000).toFixed(1)} KB gzipped`,
+const layout = gz(
+  result.outputs.filter((output) => output.path.endsWith(".js") && !isReact(output)),
 );
-if (core > BUDGET.core || withReact > BUDGET.withReact)
+const withReact = layout + gz(result.outputs.filter(isReact));
+console.log(
+  `size: . ${(layout / 1000).toFixed(1)} KB, . + ./react ${(withReact / 1000).toFixed(1)} KB gzipped`,
+);
+if (layout > BUDGET.layout || withReact > BUDGET.withReact)
   throw new Error(
-    `build: over the size budget (${BUDGET.core} / ${BUDGET.withReact} bytes gzipped)`,
+    `build: over the size budget (${BUDGET.layout} / ${BUDGET.withReact} bytes gzipped)`,
   );
 
 await rm(temp, { recursive: true, force: true });

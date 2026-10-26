@@ -1,12 +1,4 @@
-import type { FingerprintNode, RidgeStyle } from "./types";
-
-/**
- * The opacity that shows a mark's lightness: 0.3 for the first category of an ordered dimension,
- * full strength for the last, and full strength when lightness is not encoded or unknown. Renderers
- * use it so lightness reads the same whatever they draw.
- */
-export const markOpacity = (node: Pick<FingerprintNode, "lightness">) =>
-  node.lightness === null ? 1 : 0.3 + 0.7 * node.lightness;
+import type { RidgeStyle } from "./types";
 
 /**
  * The ridges' opacity for a collection of `itemCount` items under `style`: constant for `always`,

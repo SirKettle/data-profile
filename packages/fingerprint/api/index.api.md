@@ -4,8 +4,22 @@
 
 ```ts
 
-// @public
-export const DEFAULT_PALETTE: readonly ["#2f6fde", "#2bb3e6", "#f26b3a", "#f5b82e", "#14a39a", "#7a5af5", "#3fae6b", "#d9488f", "#8c6d46", "#5e8c99"];
+import type { Category } from '@data-profile/core';
+import type { Channel } from '@data-profile/core';
+import { DEFAULT_PALETTE } from '@data-profile/core';
+import type { Dimension } from '@data-profile/core';
+import type { Encoding } from '@data-profile/core';
+import { DataError as FingerprintDataError } from '@data-profile/core';
+import type { Item } from '@data-profile/core';
+import type { LegendEntry } from '@data-profile/core';
+import type { LegendGroup } from '@data-profile/core';
+import type { Mark } from '@data-profile/core';
+import { markOpacity } from '@data-profile/core';
+import type { Profile } from '@data-profile/core';
+import { UNKNOWN_CATEGORY_ID } from '@data-profile/core';
+import { UNKNOWN_COLOR } from '@data-profile/core';
+
+export { DEFAULT_PALETTE }
 
 // @public
 export function describeLayout(layout: FingerprintLayout, unit?: string): string;
@@ -20,38 +34,18 @@ export interface FingerprintAnnotation {
 }
 
 // @public
-export interface FingerprintCategory {
-    color?: string;
-    href?: string;
-    id: string;
-    label: string;
-}
+export type FingerprintCategory = Category;
 
 // @public
-export type FingerprintChannel = "arrange" | "color" | "shape" | "lightness";
+export type FingerprintChannel = Channel;
+
+export { FingerprintDataError }
 
 // @public
-export class FingerprintDataError extends Error {
-    // (undocumented)
-    name: string;
-}
+export type FingerprintDimension = Dimension;
 
 // @public
-export interface FingerprintDimension {
-    categories: readonly FingerprintCategory[];
-    id: string;
-    label: string;
-    ordered?: boolean;
-    unknownLabel?: string;
-}
-
-// @public
-export interface FingerprintEncoding {
-    arrange: string;
-    color?: string | null;
-    lightness?: string | null;
-    shape?: string | null;
-}
+export type FingerprintEncoding = Encoding;
 
 // @public
 export interface FingerprintForm {
@@ -64,59 +58,28 @@ export interface FingerprintForm {
 }
 
 // @public
-export interface FingerprintItem {
-    id: string;
-    values: Readonly<Record<string, string | null | undefined>>;
-    weight?: number;
-}
+export type FingerprintItem = Item;
 
 // @public
-export interface FingerprintLayout {
-    encoding: Required<FingerprintEncoding>;
+export interface FingerprintLayout extends Omit<Profile, "marks"> {
     form: FingerprintForm;
     height: number;
-    itemCount: number;
-    itemsPerMark: number;
-    legends: FingerprintLegendGroup[];
     nodes: FingerprintNode[];
     ridges: (readonly [x: number, y: number])[][];
     ridgeSpacing: number;
-    warnings: string[];
     width: number;
 }
 
 // @public
-export interface FingerprintLegendEntry {
-    color: string;
-    count: number;
-    href?: string;
-    id: string;
-    label: string;
-    lightness: number | null;
-    shape: number | null;
-    unknown: boolean;
-    weight: number;
-}
+export type FingerprintLegendEntry = LegendEntry;
 
 // @public
-export interface FingerprintLegendGroup {
-    channels: readonly FingerprintChannel[];
-    dimensionId: string;
-    entries: FingerprintLegendEntry[];
-    label: string;
-}
+export type FingerprintLegendGroup = LegendGroup;
 
 // @public
-export interface FingerprintNode {
-    categories: Readonly<Record<string, string>>;
-    color: string;
-    id: string;
-    itemIds: readonly string[];
-    lightness: number | null;
+export interface FingerprintNode extends Mark {
     rotation: number;
-    shape: number | null;
     size: number;
-    weight: number;
     x: number;
     y: number;
 }
@@ -142,8 +105,7 @@ export interface LayoutOptions {
     seed?: string;
 }
 
-// @public
-export const markOpacity: (node: Pick<FingerprintNode, "lightness">) => number;
+export { markOpacity }
 
 // @public
 export function placeCallouts(layout: FingerprintLayout, annotations: readonly FingerprintAnnotation[]): PlacedCallout[];
@@ -173,10 +135,8 @@ export interface RidgeStyle {
     width?: number;
 }
 
-// @public
-export const UNKNOWN_CATEGORY_ID = "~unknown";
+export { UNKNOWN_CATEGORY_ID }
 
-// @public
-export const UNKNOWN_COLOR = "#b8bcc4";
+export { UNKNOWN_COLOR }
 
 ```

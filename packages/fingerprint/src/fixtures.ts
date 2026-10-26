@@ -1,4 +1,4 @@
-import { unitHash } from "./hash";
+import { unitHash } from "@data-profile/core";
 import type { FingerprintDimension, FingerprintItem } from "./types";
 
 /**

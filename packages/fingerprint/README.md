@@ -14,8 +14,8 @@ It is not device or browser fingerprinting: nothing here identifies anyone.
   there are more items than marks, the print says how many items each mark stands for.
 - **Several things at once.** Colour, shape and lightness can each show a different property.
 - **Your own marks.** Simple shapes by default; a renderer can draw anything in SVG.
-- **Small.** No runtime dependencies. The layout works without React; the components need React 18
-  or 19.
+- **Small.** One dependency, [`@data-profile/core`](../core), which every data-profile view shares.
+  The layout works without React; the components need React 18 or 19.
 
 ## Install
 

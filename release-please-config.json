@@ -1,14 +1,21 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "include-component-in-tag": true,
+  "plugins": ["node-workspace"],
   "packages": {
+    "packages/core": {
+      "release-type": "node",
+      "package-name": "@data-profile/core",
+      "component": "core",
+      "changelog-path": "CHANGELOG.md",
+      "bump-minor-pre-major": true
+    },
     "packages/fingerprint": {
       "release-type": "node",
       "package-name": "@data-profile/fingerprint",
       "component": "fingerprint",
       "changelog-path": "CHANGELOG.md",
-      "bump-minor-pre-major": true,
-      "last-release-sha": "8f821f2498af67185eb228769a3897124af1daab"
+      "bump-minor-pre-major": true
     }
   }
 }

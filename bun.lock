@@ -14,9 +14,21 @@
         "typescript": "^5.9.3",
       },
     },
+    "packages/core": {
+      "name": "@data-profile/core",
+      "version": "0.0.0",
+      "devDependencies": {
+        "@arethetypeswrong/cli": "^0.18.5",
+        "@microsoft/api-extractor": "^7.59.4",
+        "publint": "^0.3.25",
+      },
+    },
     "packages/fingerprint": {
       "name": "@data-profile/fingerprint",
-      "version": "0.0.0",
+      "version": "0.2.0",
+      "dependencies": {
+        "@data-profile/core": "^0.0.0",
+      },
       "devDependencies": {
         "@arethetypeswrong/cli": "^0.18.5",
         "@happy-dom/global-registrator": "^20.11.2",
@@ -49,6 +61,8 @@
     "@braidai/lang": ["@braidai/lang@1.1.2", "", {}, "sha512-qBcknbBufNHlui137Hft8xauQMTZDKdophmLFv05r2eNmdIv/MlPuP4TdUknHG68UdWLgVZwgxVe735HzJNIwA=="],
 
     "@colors/colors": ["@colors/colors@1.5.0", "", {}, "sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ=="],
+
+    "@data-profile/core": ["@data-profile/core@workspace:packages/core"],
 
     "@data-profile/fingerprint": ["@data-profile/fingerprint@workspace:packages/fingerprint"],
 

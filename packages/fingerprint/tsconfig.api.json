@@ -7,7 +7,11 @@
     "outDir": "temp/dts",
     "rootDir": "src",
     "types": [],
-    "paths": {}
+    // Declarations import @data-profile/core by name, resolved as a consumer would (from
+    // node_modules, built), not from source; keeping the symlinked path is what makes
+    // api-extractor treat it as external.
+    "paths": {},
+    "preserveSymlinks": true
   },
   "include": ["src"],
   "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/react/test-setup.ts", "src/fixtures.ts"]

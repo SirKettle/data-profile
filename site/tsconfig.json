@@ -6,6 +6,7 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "paths": {
+      "@data-profile/core": ["../packages/core/src/index.ts"],
       "@data-profile/fingerprint": ["../packages/fingerprint/src/index.ts"],
       "@data-profile/fingerprint/react": ["../packages/fingerprint/src/react/index.ts"]
     }

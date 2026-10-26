@@ -31,6 +31,7 @@ export default defineConfig({
         starlightLinksValidator({ errorOnRelativeLinks: false }),
         starlightTypeDoc({
           entryPoints: [
+            fromRoot("packages/core/src/index.ts"),
             fromRoot("packages/fingerprint/src/index.ts"),
             fromRoot("packages/fingerprint/src/react/index.ts"),
           ],
@@ -69,6 +70,7 @@ export default defineConfig({
           find: /^@data-profile\/fingerprint$/,
           replacement: fromRoot("packages/fingerprint/src/index.ts"),
         },
+        { find: /^@data-profile\/core$/, replacement: fromRoot("packages/core/src/index.ts") },
       ],
     },
   },
