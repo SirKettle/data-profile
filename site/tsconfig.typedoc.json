@@ -3,7 +3,7 @@
   "compilerOptions": {
     "types": []
   },
-  "include": ["../packages/core/src", "../packages/fingerprint/src"],
+  "include": ["../packages/core/src", "../packages/fingerprint/src", "../packages/waffle/src"],
   "exclude": [
     "../packages/*/src/**/*.test.ts",
     "../packages/*/src/**/*.test.tsx",

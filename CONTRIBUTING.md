@@ -12,6 +12,8 @@ A Bun workspace. Each package under `packages/` is published to npm on its own:
   no React, and nothing about how marks are placed.
 - `packages/fingerprint`: `@data-profile/fingerprint`, a view. It places core's marks along
   fingerprint ridges and draws them in React.
+- `packages/waffle`: `@data-profile/waffle`, a view. It places core's marks in a grid, in reading
+  order. Layout only, for now.
 
 A view depends on core alone, never on another view, and imports it by package name; each
 package's `src/architecture.test.ts` enforces it. Inside the workspace, `tsconfig.base.json` maps

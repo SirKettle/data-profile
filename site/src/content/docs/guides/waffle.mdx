@@ -1,0 +1,26 @@
+---
+title: The waffle view
+description: The same data as a grid of cells, one per item, with @data-profile/waffle.
+sidebar:
+  order: 4
+---
+
+import Demo from "../../../components/Demo.astro";
+import Waffle from "../../../demos/waffle.tsx";
+import waffle from "../../../demos/waffle.tsx?raw";
+
+A fingerprint is one way to draw a dataset. `@data-profile/waffle` is another: one cell per item in
+a grid, filled left to right and top to bottom, so each category is a run you read like a line of
+text. Both build on `@data-profile/core`, so the items, dimensions and encodings are the same.
+
+```sh
+npm install @data-profile/waffle @data-profile/core
+```
+
+`layoutWaffle` returns plain data: each cell's centre and size in a frame 400 wide, with its
+colour, shape and lightness resolved. Pass `columns: 10` with 100 items for the classic one cell
+per percent.
+
+<Demo code={waffle} file="waffle.tsx">
+  <Waffle client:only="react" />
+</Demo>

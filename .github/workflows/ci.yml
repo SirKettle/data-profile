@@ -22,6 +22,8 @@ jobs:
       # without the shared core, if JSX targets React's development runtime, or over the size budget.
       - run: bun run build
       - run: bun run lint:package
+      # Views without React: the packed package and core, installed, type-checked and run under Node.
+      - run: bun run --cwd packages/waffle check:consumer
 
   # The peer range each package.json declares is tested, not assumed: each cell installs the packed
   # package into a fresh npm project, type-checks a consumer under bundler and node16 resolution,
