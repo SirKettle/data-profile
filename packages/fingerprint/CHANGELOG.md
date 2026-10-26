@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.0](https://github.com/SirKettle/data-profile/compare/fingerprint-v0.2.0...fingerprint-v0.3.0) (2026-10-26)
+
+
+### Features
+
+* add @data-profile/core, and build the fingerprint on it ([30873f9](https://github.com/SirKettle/data-profile/commit/30873f9997b51fde6eb96cd233a2c486d87d8f04))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @data-profile/core bumped from ^0.0.0 to ^0.1.0
+
 ## [0.2.0](https://github.com/SirKettle/data-profile/compare/fingerprint-v0.1.0...fingerprint-v0.2.0) (2026-10-26)
 
 

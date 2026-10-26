@@ -1,6 +1,6 @@
 {
   "name": "@data-profile/core",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "The shared core of data-profile views: turns any categorical dataset into ordered, encoded marks and legends, ready for a view to place.",
   "license": "MIT",
   "author": "Will Thirkettle",
